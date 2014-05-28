@@ -4,7 +4,7 @@ namespace Comb.Sample
 {
     class Program
     {
-        const string SearchEndpoint = "search-dev6-n4lportalsearch-ndrqsgbvshx4jd7zr2uhk3wmtm.ap-southeast-2.cloudsearch.amazonaws.com";
+        const string SearchEndpoint = "search-comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
 
         static void Main()
         {
