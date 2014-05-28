@@ -1,0 +1,14 @@
+# User-specific files
+*.suo
+*.user
+
+
+# NuGet packages
+packages/*
+!packages/build/
+
+# Build output
+bin
+obj
+
+
