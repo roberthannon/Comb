@@ -1,4 +1,6 @@
 ﻿using System;
+using Comb.Queries;
+using Comb.Responses;
 
 namespace Comb.Sample
 {
@@ -8,8 +10,14 @@ namespace Comb.Sample
 
         static void Main()
         {
+            var query = new SearchQuery
+            {
+                Start = 1,
+                Size = 2
+            };
+
             var client = new SearchClient(SearchEndpoint);
-            var results = client.SearchAsync<Result>().Result;
+            var results = client.SearchAsync<Result>(query).Result;
 
             Console.WriteLine(results.Status.ResourceId);
             Console.WriteLine(results.Status.TimeMs);
@@ -18,14 +26,16 @@ namespace Comb.Sample
 
             foreach (var hit in results.Hits.Hit)
             {
-                Console.WriteLine(hit.Id);
+                Console.WriteLine(hit.Fields.Id);
                 Console.WriteLine(hit.Fields.Test);
             }
         }
     }
 
-    public class Result
+    public class Result : ISearchResponse
     {
+        public string Id { get; set; }
+
         public string Test { get; set; }
     }
 }

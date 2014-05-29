@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Comb.Queries;
+using Comb.Responses;
 
 namespace Comb
 {
@@ -6,6 +8,7 @@ namespace Comb
     {
         string Endpoint { get; set; }
 
-        Task<SearchResult<T>> SearchAsync<T>();
+        Task<SearchResponse<T>> SearchAsync<T>(SearchQuery query)
+            where T : ISearchResponse;
     }
 }
