@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Queries\Class1.cs" />
+    <Compile Include="Queries\SearchQuery.cs" />
     <Compile Include="Responses\Hit.cs" />
     <Compile Include="Responses\Hits.cs" />
     <Compile Include="ISearchClient.cs" />

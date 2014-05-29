@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,11 @@ namespace Comb
 
                 if (query.Size.HasValue)
                     queryString["size"] = query.Size.ToString();
+
+                if (query.Sort.Any())
+                    queryString["sort"] = string.Join(",", query.Sort.Select(x => x.ToString()).ToArray());
+
+                Console.WriteLine(queryString.ToString());
 
                 using (var response = await client.GetAsync("search?" + queryString))
                 {

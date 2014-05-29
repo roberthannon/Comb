@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Comb.Queries;
 using Comb.Responses;
 
@@ -12,8 +13,12 @@ namespace Comb.Sample
         {
             var query = new SearchQuery
             {
-                Start = 1,
-                Size = 2
+                Start = 0,
+                Size = 20,
+                Sort = new List<Sort>
+                {
+                    new Sort { Name = "_id", Direction = SortDirection.Ascending }
+                }
             };
 
             var client = new SearchClient(SearchEndpoint);
