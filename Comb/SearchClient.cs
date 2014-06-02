@@ -22,7 +22,7 @@ namespace Comb
             Endpoint = endpoint;
         }
 
-        public async Task<SearchResponse<T>> SearchAsync<T>(SearchQuery query)
+        public async Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
             where T : ISearchResponse
         {
             using (var client = new HttpClient())
@@ -33,14 +33,14 @@ namespace Comb
 
                 queryString["q"] = "boop";
 
-                if (query.Start.HasValue)
-                    queryString["start"] = query.Start.ToString();
+                if (request.Start.HasValue)
+                    queryString["start"] = request.Start.ToString();
 
-                if (query.Size.HasValue)
-                    queryString["size"] = query.Size.ToString();
+                if (request.Size.HasValue)
+                    queryString["size"] = request.Size.ToString();
 
-                if (query.Sort.Any())
-                    queryString["sort"] = string.Join(",", query.Sort.Select(x => x.ToString()).ToArray());
+                if (request.Sort.Any())
+                    queryString["sort"] = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
 
                 Console.WriteLine(queryString.ToString());
 

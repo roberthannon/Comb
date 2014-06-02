@@ -11,13 +11,13 @@ namespace Comb.Sample
 
         static void Main()
         {
-            var query = new SearchQuery
+            var query = new SearchRequest
             {
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
                 {
-                    new Sort { Name = "_id", Direction = SortDirection.Ascending }
+                    new Sort(Expression.Id, SortDirection.Ascending)
                 }
             };
 

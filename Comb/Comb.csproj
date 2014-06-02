@@ -46,15 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Queries\SearchQuery.cs" />
-    <Compile Include="Responses\Hit.cs" />
-    <Compile Include="Responses\Hits.cs" />
+    <Compile Include="Searching\CustomExpression.cs" />
+    <Compile Include="Searching\Expression.cs" />
+    <Compile Include="Searching\IdExpression.cs" />
+    <Compile Include="Searching\Queries\Query.cs" />
+    <Compile Include="Searching\SearchRequest.cs" />
+    <Compile Include="Searching\Queries\SimpleQuery.cs" />
+    <Compile Include="Searching\Sort.cs" />
+    <Compile Include="Searching\SortDirection.cs" />
+    <Compile Include="Searching\Queries\StructuredQuery.cs" />
+    <Compile Include="Searching\VersionExpression.cs" />
+    <Compile Include="Searching\Responses\Hit.cs" />
+    <Compile Include="Searching\Responses\Hits.cs" />
     <Compile Include="ISearchClient.cs" />
-    <Compile Include="Responses\ISearchResponse.cs" />
+    <Compile Include="Searching\Responses\ISearchResponse.cs" />
     <Compile Include="SearchClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Responses\SearchResponse.cs" />
-    <Compile Include="Responses\Status.cs" />
+    <Compile Include="Searching\Responses\SearchResponse.cs" />
+    <Compile Include="Searching\Responses\Status.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Packages.config" />
