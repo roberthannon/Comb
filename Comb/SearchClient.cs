@@ -5,8 +5,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Comb.Queries;
-using Comb.Responses;
+using Comb.Searching;
+using Comb.Searching.Responses;
 using Newtonsoft.Json;
 
 namespace Comb

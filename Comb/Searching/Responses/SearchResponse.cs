@@ -1,4 +1,4 @@
-﻿namespace Comb.Responses
+﻿namespace Comb.Searching.Responses
 {
     public class SearchResponse<T>
         where T : ISearchResponse

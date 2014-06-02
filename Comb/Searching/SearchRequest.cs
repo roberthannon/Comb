@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Comb.Searching.Queries;
 
-namespace Comb.Queries
+namespace Comb.Searching
 {
     public class SearchRequest
     {
@@ -8,6 +9,8 @@ namespace Comb.Queries
         public uint? Size { get; set; }
 
         public List<Sort> Sort { get; set; }
+
+        public Query Query { get; set; }
 
         public SearchRequest()
         {

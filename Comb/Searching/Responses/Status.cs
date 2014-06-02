@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Comb.Responses
+namespace Comb.Searching.Responses
 {
     public class Status
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Comb.Queries;
-using Comb.Responses;
+using Comb.Searching;
+using Comb.Searching.Responses;
 
 namespace Comb.Sample
 {

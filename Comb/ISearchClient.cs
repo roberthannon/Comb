@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Comb.Queries;
-using Comb.Responses;
+using Comb.Searching;
+using Comb.Searching.Responses;
 
 namespace Comb
 {
