@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Comb.Searching;
+using Comb.Searching.Expressions;
+using Comb.Searching.Queries;
+using Comb.Searching.Queries.Structured;
 using Comb.Searching.Responses;
 
 namespace Comb.Sample
@@ -9,15 +12,23 @@ namespace Comb.Sample
     {
         const string SearchEndpoint = "search-comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
 
+        public static readonly DomainExpression Silly = new DomainExpression("silly");
+        public static readonly DomainExpression Test = new DomainExpression("test");
+
         static void Main()
         {
+            // TODO: Restriction of returned fields - probably based on result class requested.
+            // TODO: Custom sorting expressions.
+
             var query = new SearchRequest
             {
+//              Query = new SimpleQuery("boop |beep -bing"),
+                Query = new StructuredQuery(new NotCondition(new StringCondition("beep"))),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
                 {
-                    new Sort(Expression.Id, SortDirection.Ascending)
+                    new Sort(Silly, SortDirection.Descending)
                 }
             };
 

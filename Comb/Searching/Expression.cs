@@ -1,4 +1,6 @@
-﻿namespace Comb.Searching
+﻿using Comb.Searching.Expressions;
+
+namespace Comb.Searching
 {
     public abstract class Expression
     {

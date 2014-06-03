@@ -31,7 +31,11 @@ namespace Comb
 
                 var queryString = HttpUtility.ParseQueryString(String.Empty);
 
-                queryString["q"] = "boop";
+                if (request.Query != null)
+                {
+                    queryString["q"] = request.Query.Definition;
+                    queryString["q.parser"] = request.Query.Parser;
+                }
 
                 if (request.Start.HasValue)
                     queryString["start"] = request.Start.ToString();

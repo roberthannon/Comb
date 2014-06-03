@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching
+﻿namespace Comb.Searching.Expressions
 {
     public class VersionExpression : Expression
     {
