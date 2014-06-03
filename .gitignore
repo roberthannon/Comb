@@ -7,6 +7,10 @@
 packages/*
 !packages/build/
 
+# NuGet build
+*.nupkg
+.symbols.nupkg
+
 # Build output
 bin
 obj

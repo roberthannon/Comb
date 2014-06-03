@@ -74,6 +74,7 @@
     <Compile Include="Searching\Responses\Status.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Comb.nuspec" />
     <None Include="Packages.config" />
   </ItemGroup>
   <ItemGroup />
