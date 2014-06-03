@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
 using Comb.Searching;
 using Comb.Searching.Expressions;
 using Comb.Searching.Queries;
@@ -23,7 +25,15 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
 //              Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new NotCondition(new StringCondition("beep"))),
+                Query = new StructuredQuery(new AndCondition(new Condition[]
+                {
+                    new StringCondition("test", "boop"),
+                    new AndCondition(new[]
+                    {
+                        new StringCondition("Beep"), 
+                        new StringCondition("Bing")
+                    })
+                })),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
