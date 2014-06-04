@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using Comb.Documents;
+using Comb.Searching;
+using Comb.Searching.Responses;
+using Newtonsoft.Json;
+
+namespace Comb
+{
+    public class CloudSearchClient : ICloudSearchClient
+    {
+        readonly HttpClient _searchClient;
+        readonly HttpClient _documentClient;
+        readonly JsonSerializer _jsonSerializer;
+
+        public CloudSearchClient(string endpoint)
+        {
+            _searchClient = new HttpClient
+            {
+                BaseAddress = new Uri(string.Format("http://search-{0}/{1}/", endpoint, Constants.ApiVersion))
+            };
+
+            _documentClient = new HttpClient
+            {
+                BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", endpoint, Constants.ApiVersion))
+            };
+
+            _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
+        }
+
+        public Task UpdateAsync(DocumentRequest request)
+        {
+            return Post<DocumentResponse>(_documentClient, "documents/batch", new List<DocumentRequest>
+            {
+                request
+            });
+        }
+
+        public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
+        {
+            var queryString = HttpUtility.ParseQueryString(String.Empty);
+
+            if (request.Query != null)
+            {
+                queryString["q"] = request.Query.Definition;
+                queryString["q.parser"] = request.Query.Parser;
+            }
+
+            if (request.Start.HasValue)
+                queryString["start"] = request.Start.ToString();
+
+            if (request.Size.HasValue)
+                queryString["size"] = request.Size.ToString();
+
+            if (request.Sort.Any())
+                queryString["sort"] = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
+
+            return Get<SearchResponse<T>>(_searchClient, "search", queryString);
+        }
+
+        async Task<T> Get<T>(HttpClient httpClient, string url, NameValueCollection queryString)
+        {
+            if (queryString != null)
+                url = string.Format("{0}?{1}", url, queryString);
+
+            using (var response = await httpClient.GetAsync(url))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new NotImplementedException();
+
+                using (var content = await response.Content.ReadAsStreamAsync())
+                using (var streamReader = new StreamReader(content, Encoding.UTF8))
+                using (var jsonReader = new JsonTextReader(streamReader))
+                {
+                    return _jsonSerializer.Deserialize<T>(jsonReader);
+                }
+            }
+        }
+
+        async Task<T> Post<T>(HttpClient httpClient, string url, object body)
+        {
+            HttpContent input;
+
+            using (var sw = new StringWriter())
+            {
+                _jsonSerializer.Serialize(sw, body);
+                input = new StringContent(sw.ToString(), Encoding.UTF8, "application/json");
+            }
+
+            using (var response = await httpClient.PostAsync(url, input))
+            {
+                if (!response.IsSuccessStatusCode)
+                    throw new NotImplementedException();
+
+                using (var content = await response.Content.ReadAsStreamAsync())
+                using (var streamReader = new StreamReader(content, Encoding.UTF8))
+                using (var jsonReader = new JsonTextReader(streamReader))
+                {
+                    return _jsonSerializer.Deserialize<T>(jsonReader);
+                }
+            }
+        }
+    }
+}
+

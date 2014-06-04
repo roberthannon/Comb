@@ -4,13 +4,12 @@ using Comb.Searching;
 using Comb.Searching.Expressions;
 using Comb.Searching.Queries;
 using Comb.Searching.Queries.Structured;
-using Comb.Searching.Responses;
 
 namespace Comb.Sample
 {
     class Program
     {
-        const string SearchEndpoint = "search-comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
+        const string SearchEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
 
         public static readonly DomainExpression Silly = new DomainExpression("silly");
         public static readonly DomainExpression Test = new DomainExpression("test");
@@ -40,7 +39,7 @@ namespace Comb.Sample
                 }
             };
 
-            var client = new SearchClient(SearchEndpoint);
+            var client = new CloudSearchClient(SearchEndpoint);
             var results = client.SearchAsync<Result>(query).Result;
 
             Console.WriteLine(results.Status.ResourceId);
@@ -56,7 +55,7 @@ namespace Comb.Sample
         }
     }
 
-    public class Result : ISearchResult
+    public class Result
     {
         public string Id { get; set; }
 
