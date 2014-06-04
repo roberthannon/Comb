@@ -9,6 +9,6 @@ namespace Comb
         string Endpoint { get; set; }
 
         Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
-            where T : ISearchResponse;
+            where T : ISearchResult;
     }
 }

@@ -23,7 +23,7 @@ namespace Comb
         }
 
         public async Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
-            where T : ISearchResponse
+            where T : ISearchResult
         {
             using (var client = new HttpClient())
             {

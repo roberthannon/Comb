@@ -1,7 +1,7 @@
 ﻿namespace Comb.Searching.Responses
 {
     public class SearchResponse<T>
-        where T : ISearchResponse
+        where T : ISearchResult
     {
         public Status Status { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿namespace Comb.Searching.Responses
 {
     public class Hit<T>
-        where T : ISearchResponse
+        where T : ISearchResult
     {
         /// <summary>
         /// The unique identifier for the document found.

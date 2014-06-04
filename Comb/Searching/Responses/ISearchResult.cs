@@ -1,6 +1,6 @@
 ﻿namespace Comb.Searching.Responses
 {
-    public interface ISearchResponse
+    public interface ISearchResult
     {
         /// <summary>
         /// The unique identifier for the document found.

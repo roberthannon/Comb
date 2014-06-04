@@ -1,7 +1,7 @@
 ﻿namespace Comb.Searching.Responses
 {
     public class Hits<T>
-        where T : ISearchResponse
+        where T : ISearchResult
     {
         /// <summary>
         /// The total number of hits that match the search request after Amazon CloudSearch finished

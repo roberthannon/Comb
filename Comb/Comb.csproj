@@ -67,7 +67,7 @@
     <Compile Include="Searching\Responses\Hit.cs" />
     <Compile Include="Searching\Responses\Hits.cs" />
     <Compile Include="ISearchClient.cs" />
-    <Compile Include="Searching\Responses\ISearchResponse.cs" />
+    <Compile Include="Searching\Responses\ISearchResult.cs" />
     <Compile Include="SearchClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Searching\Responses\SearchResponse.cs" />

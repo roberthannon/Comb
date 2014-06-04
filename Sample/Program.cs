@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization;
 using Comb.Searching;
 using Comb.Searching.Expressions;
 using Comb.Searching.Queries;
@@ -58,7 +56,7 @@ namespace Comb.Sample
         }
     }
 
-    public class Result : ISearchResponse
+    public class Result : ISearchResult
     {
         public string Id { get; set; }
 
