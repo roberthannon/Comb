@@ -7,7 +7,7 @@
     <description>$description$</description>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <releaseNotes>Initial draft prototype.</releaseNotes>
+    <releaseNotes>Fleshing out the API.</releaseNotes>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/BarryDahlberg/Comb</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
