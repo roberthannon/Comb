@@ -14,6 +14,11 @@ using Newtonsoft.Json;
 
 namespace Comb
 {
+    public interface IHttpClientFactory
+    {
+        HttpClient Make();
+    }
+
     public class CloudSearchClient : ICloudSearchClient
     {
         readonly HttpClient _searchClient;
