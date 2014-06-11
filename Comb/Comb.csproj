@@ -55,6 +55,7 @@
     <Compile Include="Searching\Expression.cs" />
     <Compile Include="Searching\Expressions\FieldExpression.cs" />
     <Compile Include="Searching\Expressions\IdExpression.cs" />
+    <Compile Include="Searching\Queries\MatchAllQuery.cs" />
     <Compile Include="Searching\Queries\Query.cs" />
     <Compile Include="Searching\Queries\Structured\StringCondition.cs" />
     <Compile Include="Searching\Queries\Structured\NotCondition.cs" />

@@ -48,6 +48,11 @@ namespace Comb
             });
         }
 
+        public Task UpdateAsync(IEnumerable<DocumentRequest> requests)
+        {
+            return Post<DocumentResponse>(_documentClient, "documents/batch", requests);
+        }
+
         public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
         {
             var queryString = HttpUtility.ParseQueryString(String.Empty);

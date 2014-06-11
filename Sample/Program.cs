@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Comb.Searching;
 using Comb.Searching.Expressions;
 using Comb.Searching.Queries;
-using Comb.Searching.Queries.Structured;
 
 namespace Comb.Sample
 {
@@ -22,7 +21,7 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
 //              Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new AndCondition(new Condition[]
+/*              Query = new StructuredQuery(new AndCondition(new Condition[]
                 {
                     new StringCondition("test", "boop"),
                     new AndCondition(new[]
@@ -31,6 +30,8 @@ namespace Comb.Sample
                         new StringCondition("Bing")
                     })
                 })),
+*/
+                Query = new MatchAllQuery(),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
