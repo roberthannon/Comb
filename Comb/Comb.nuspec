@@ -7,7 +7,7 @@
     <description>$description$</description>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <releaseNotes>Fleshing out the API.</releaseNotes>
+    <releaseNotes>Batch updates and MatchAllQuery.</releaseNotes>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/BarryDahlberg/Comb</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
