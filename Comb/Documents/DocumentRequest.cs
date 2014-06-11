@@ -1,9 +1,13 @@
-﻿namespace Comb.Documents
+﻿using Newtonsoft.Json;
+
+namespace Comb.Documents
 {
     public abstract class DocumentRequest
     {
+        [JsonProperty("type")]
         public string Type { get; private set; }
 
+        [JsonProperty("id")]
         public string Id { get; private set; }
 
         protected DocumentRequest(string type, string id)

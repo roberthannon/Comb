@@ -70,17 +70,25 @@ namespace Comb
             if (queryString != null)
                 url = string.Format("{0}?{1}", url, queryString);
 
-            using (var response = await httpClient.GetAsync(url))
+            try
             {
-                if (!response.IsSuccessStatusCode)
-                    throw new NotImplementedException();
-
-                using (var content = await response.Content.ReadAsStreamAsync())
-                using (var streamReader = new StreamReader(content, Encoding.UTF8))
-                using (var jsonReader = new JsonTextReader(streamReader))
+                using (var response = await httpClient.GetAsync(url).ConfigureAwait(false))
                 {
-                    return _jsonSerializer.Deserialize<T>(jsonReader);
+                    if (!response.IsSuccessStatusCode)
+                        throw new NotImplementedException();
+
+                    using (var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                    using (var streamReader = new StreamReader(content, Encoding.UTF8))
+                    using (var jsonReader = new JsonTextReader(streamReader))
+                    {
+                        return _jsonSerializer.Deserialize<T>(jsonReader);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
             }
         }
 
