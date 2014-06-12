@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Comb.Searching.Queries;
 
-namespace Comb.Searching
+namespace Comb
 {
     public class SearchRequest
     {

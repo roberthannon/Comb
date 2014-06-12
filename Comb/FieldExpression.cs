@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching.Expressions
+﻿namespace Comb
 {
     /// <summary>
     /// Already defined in the search domain.

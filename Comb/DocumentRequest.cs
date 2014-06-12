@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Comb.Documents
+namespace Comb
 {
     public abstract class DocumentRequest
     {

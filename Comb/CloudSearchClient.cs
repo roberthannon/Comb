@@ -7,35 +7,28 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Comb.Documents;
-using Comb.Searching;
-using Comb.Searching.Responses;
 using Newtonsoft.Json;
 
 namespace Comb
 {
-    public interface IHttpClientFactory
-    {
-        HttpClient Make();
-    }
-
     public class CloudSearchClient : ICloudSearchClient
     {
         readonly HttpClient _searchClient;
         readonly HttpClient _documentClient;
         readonly JsonSerializer _jsonSerializer;
 
-        public CloudSearchClient(string endpoint)
+        public CloudSearchClient()
+            : this(CloudSearchSettings.Default)
         {
-            _searchClient = new HttpClient
-            {
-                BaseAddress = new Uri(string.Format("http://search-{0}/{1}/", endpoint, Constants.ApiVersion))
-            };
+        }
 
-            _documentClient = new HttpClient
-            {
-                BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", endpoint, Constants.ApiVersion))
-            };
+        public CloudSearchClient(CloudSearchSettings settings)
+        {
+            _searchClient = settings.HttpClientFactory.MakeInstance();
+            _searchClient.BaseAddress = new Uri(string.Format("http://search-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
+
+            _documentClient = settings.HttpClientFactory.MakeInstance();
+            _documentClient.BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
 
             _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
         }

@@ -1,4 +1,4 @@
-namespace Comb.Searching.Expressions
+namespace Comb
 {
     /// <summary>
     /// Custom expression for this query.

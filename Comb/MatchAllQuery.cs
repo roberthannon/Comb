@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching.Queries
+﻿namespace Comb
 {
     /// <summary>
     /// A special structured query which matches all documents in the index.

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Comb.Searching;
-using Comb.Searching.Expressions;
 using Comb.Searching.Queries;
 
 namespace Comb.Sample
@@ -40,7 +39,11 @@ namespace Comb.Sample
                 }
             };
 
-            var client = new CloudSearchClient(SearchEndpoint);
+            var client = new CloudSearchClient(new CloudSearchSettings
+            {
+                Endpoint = SearchEndpoint
+            });
+
             var results = client.SearchAsync<Result>(query).Result;
 
             Console.WriteLine(results.Status.ResourceId);

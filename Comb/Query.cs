@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching.Queries
+﻿namespace Comb
 {
     public abstract class Query
     {

@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Comb.Documents;
-using Comb.Searching;
-using Comb.Searching.Responses;
 
 namespace Comb
 {

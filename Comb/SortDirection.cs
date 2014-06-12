@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching
+﻿namespace Comb
 {
     public enum SortDirection
     {

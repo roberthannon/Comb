@@ -1,4 +1,4 @@
-﻿namespace Comb.Documents
+﻿namespace Comb
 {
     public class Delete : DocumentRequest
     {

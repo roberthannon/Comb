@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching.Expressions
+﻿namespace Comb
 {
     public class IdExpression : Expression
     {

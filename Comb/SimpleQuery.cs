@@ -1,4 +1,6 @@
-﻿namespace Comb.Searching.Queries
+﻿using Comb.Searching.Queries;
+
+namespace Comb
 {
     /// <summary>
     /// Defines how results are found using the 'simple' query syntax.
