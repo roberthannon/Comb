@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Comb.StructuredQueries
 {
-    public abstract class GroupCondition : Condition
+    public abstract class GroupCondition : ICondition
     {
         protected GroupCondition(string operatar)
         {
@@ -13,9 +13,9 @@ namespace Comb.StructuredQueries
 
         public abstract IEnumerable<Option> Options { get; }
 
-        public abstract IEnumerable<Condition> Terms { get; }
+        public abstract IEnumerable<ICondition> Terms { get; }
 
-        public override string Definition
+        public string Definition
         {
             get
             {
@@ -23,6 +23,9 @@ namespace Comb.StructuredQueries
                 {
                     Operator
                 };
+
+                foreach (var option in Options)
+                    parts.Add(string.Format("{0}={1}", option.Name, option.Value));
 
                 foreach (var term in Terms)
                     parts.Add(term.Definition);

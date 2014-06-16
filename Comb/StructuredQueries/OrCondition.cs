@@ -6,7 +6,7 @@ namespace Comb.StructuredQueries
     public class OrCondition : GroupCondition
     {
         readonly uint? _boost;
-        readonly ICollection<Condition> _terms;
+        readonly ICollection<ICondition> _terms;
 
         public uint? Boost
         {
@@ -22,12 +22,12 @@ namespace Comb.StructuredQueries
             }
         }
 
-        public override IEnumerable<Condition> Terms
+        public override IEnumerable<ICondition> Terms
         {
             get { return _terms; }
         }
 
-        public OrCondition(ICollection<Condition> terms, uint? boost = null)
+        public OrCondition(ICollection<ICondition> terms, uint? boost = null)
             : base("or")
         {
             if (terms == null)

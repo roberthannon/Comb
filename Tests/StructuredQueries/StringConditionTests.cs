@@ -18,7 +18,7 @@ namespace Comb.Tests.StructuredQueries
             {
                 new StringCondition(field, "blip");
             },
-                Throws.ArgumentException.ForParameter("field"));
+            Throws.ArgumentException.ForParameter("field"));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Comb.Tests.StructuredQueries
             {
                 new StringCondition("field", null);
             },
-                Throws.TypeOf<ArgumentNullException>().ForParameter("value"));
+            Throws.TypeOf<ArgumentNullException>().ForParameter("value"));
         }
 
         [TestCase("NULL TERMINATED\0", "noop:'NULL TERMINATED'")]
@@ -69,6 +69,7 @@ namespace Comb.Tests.StructuredQueries
         [TestCase("'", "zurb:'\\''")]
         public void ValuesAreEncodedIfRequired(string value, string expected)
         {
+            // TODO: Verify these encodes in actual CloudSeach searches.
             var condition = new StringCondition("zurb", value);
             var definition = condition.Definition;
 

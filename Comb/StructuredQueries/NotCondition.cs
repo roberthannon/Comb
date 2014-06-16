@@ -6,7 +6,7 @@ namespace Comb.StructuredQueries
     public class NotCondition : GroupCondition
     {
         readonly uint? _boost;
-        readonly Condition _term;
+        readonly ICondition _term;
 
         public uint? Boost
         {
@@ -22,12 +22,12 @@ namespace Comb.StructuredQueries
             }
         }
 
-        public override IEnumerable<Condition> Terms
+        public override IEnumerable<ICondition> Terms
         {
             get { yield return _term; }
         }
 
-        public NotCondition(Condition term, uint? boost = null)
+        public NotCondition(ICondition term, uint? boost = null)
             : base("not")
         {
             if (term == null)

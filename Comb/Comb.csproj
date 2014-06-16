@@ -68,7 +68,7 @@
     <Compile Include="StructuredQueries\AndCondition.cs" />
     <Compile Include="StructuredQueries\GroupCondition.cs" />
     <Compile Include="StructuredQueries\Option.cs" />
-    <Compile Include="StructuredQueries\Condition.cs" />
+    <Compile Include="StructuredQueries\ICondition.cs" />
     <Compile Include="SearchRequest.cs" />
     <Compile Include="SimpleQuery.cs" />
     <Compile Include="StructuredQueries\StructuredQuery.cs" />

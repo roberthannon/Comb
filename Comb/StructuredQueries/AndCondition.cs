@@ -6,7 +6,7 @@ namespace Comb.StructuredQueries
     public class AndCondition : GroupCondition
     {
         readonly uint? _boost;
-        readonly ICollection<Condition> _terms;
+        readonly ICollection<ICondition> _terms;
 
         public uint? Boost
         {
@@ -22,12 +22,12 @@ namespace Comb.StructuredQueries
             }
         }
 
-        public override IEnumerable<Condition> Terms
+        public override IEnumerable<ICondition> Terms
         {
             get { return _terms; }
         }
 
-        public AndCondition(ICollection<Condition> terms, uint? boost = null)
+        public AndCondition(ICollection<ICondition> terms, uint? boost = null)
             : base("and")
         {
             if (terms == null)

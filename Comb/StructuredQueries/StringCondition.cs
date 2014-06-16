@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Comb.StructuredQueries
 {
-    public class StringCondition : Condition
+    public class StringCondition : ICondition
     {
         readonly string _field;
         readonly string _value;
@@ -39,7 +39,7 @@ namespace Comb.StructuredQueries
         {
         }
 
-        public override string Definition
+        public string Definition
         {
             get
             {

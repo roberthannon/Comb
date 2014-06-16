@@ -6,9 +6,9 @@
     /// </summary>
     public class StructuredQuery : Query
     {
-        readonly Condition _root;
+        readonly ICondition _root;
 
-        public StructuredQuery(Condition root)
+        public StructuredQuery(ICondition root)
         {
             _root = root;
         }
