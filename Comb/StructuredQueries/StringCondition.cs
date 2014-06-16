@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Comb.StructuredQueries
 {
@@ -10,7 +12,7 @@ namespace Comb.StructuredQueries
 
         public StringCondition(string field, string value)
         {
-            if (!string.IsNullOrWhiteSpace(field))
+            if (!string.IsNullOrEmpty(field))
             {
                 if (!Regex.IsMatch(field, Constants.FieldNameFormat))
                     throw new ArgumentException(string.Format("Invalid field name: {0}", field), "field");
@@ -24,6 +26,9 @@ namespace Comb.StructuredQueries
             {
                 _field = null;
             }
+
+            if (value == null)
+                throw new ArgumentNullException("value");
 
             _field = field;
             _value = value;
@@ -44,7 +49,7 @@ namespace Comb.StructuredQueries
                     ? "{0}:'{1}'"
                     : "'{1}'";
 
-                return string.Format(format, _field, _value);
+                return string.Format(format, _field, new string(_value.Where(XmlConvert.IsXmlChar).ToArray()));
             }
         }
     }
