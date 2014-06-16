@@ -1,6 +1,4 @@
-﻿using Comb.Searching.Queries.Structured;
-
-namespace Comb.Searching.Queries
+﻿namespace Comb.StructuredQueries
 {
     /// <summary>
     /// Defines how results are found using the 'structured' query syntax.

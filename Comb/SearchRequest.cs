@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Comb.Searching.Queries;
 
 namespace Comb
 {

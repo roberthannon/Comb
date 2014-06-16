@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Comb.Searching.Queries.Structured
+namespace Comb.StructuredQueries
 {
     public abstract class GroupCondition : Condition
     {

@@ -1,4 +1,7 @@
-﻿namespace Comb.Searching.Queries.Structured
+﻿using System;
+using System.Text.RegularExpressions;
+
+namespace Comb.StructuredQueries
 {
     public class StringCondition : Condition
     {
@@ -7,13 +10,28 @@
 
         public StringCondition(string field, string value)
         {
+            if (!string.IsNullOrWhiteSpace(field))
+            {
+                if (!Regex.IsMatch(field, Constants.FieldNameFormat))
+                    throw new ArgumentException(string.Format("Invalid field name: {0}", field), "field");
+
+                if (Constants.ReservedFieldNames.Contains(field))
+                    throw new ArgumentException(string.Format("Reserved field name: {0}", field), "field");
+
+                _field = field;
+            }
+            else
+            {
+                _field = null;
+            }
+
             _field = field;
             _value = value;
         }
 
         public StringCondition(string value)
+            : this(null, value)
         {
-            _value = value;
         }
 
         public override string Definition

@@ -54,8 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Search\SearchAsyncTests.cs" />
+    <Compile Include="SearchAsyncTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\ConstraintExtensions.cs" />
+    <Compile Include="StructuredQueries\OrConditionTests.cs" />
+    <Compile Include="StructuredQueries\StringConditionTests.cs" />
     <Compile Include="Support\TestHttpClientFactory.cs" />
     <Compile Include="Support\TestHttpContent.cs" />
     <Compile Include="Support\TestHttpMessageHandlerStub.cs" />

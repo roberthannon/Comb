@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Comb.Searching.Queries.Structured
+namespace Comb.StructuredQueries
 {
     public class NotCondition : GroupCondition
     {

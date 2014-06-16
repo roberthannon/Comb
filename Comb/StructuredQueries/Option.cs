@@ -1,4 +1,4 @@
-﻿namespace Comb.Searching.Queries.Structured
+﻿namespace Comb.StructuredQueries
 {
     public class Option
     {

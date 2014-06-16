@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Comb.Searching;
-using Comb.Searching.Queries;
 
 namespace Comb.Sample
 {

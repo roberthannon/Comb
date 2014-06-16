@@ -2,7 +2,7 @@
 using Comb.Tests.Support;
 using NUnit.Framework;
 
-namespace Comb.Tests.Search
+namespace Comb.Tests
 {
     public class SearchAsyncTests
     {
