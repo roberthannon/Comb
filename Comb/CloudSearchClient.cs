@@ -35,7 +35,7 @@ namespace Comb
 
         public Task UpdateAsync(DocumentRequest request)
         {
-            return Post<DocumentResponse>(_documentClient, "documents/batch", new List<DocumentRequest>
+            return PostDocuments<DocumentResponse>(_documentClient, "documents/batch", new List<DocumentRequest>
             {
                 request
             });
@@ -43,7 +43,7 @@ namespace Comb
 
         public Task UpdateAsync(IEnumerable<DocumentRequest> requests)
         {
-            return Post<DocumentResponse>(_documentClient, "documents/batch", requests);
+            return PostDocuments<DocumentResponse>(_documentClient, "documents/batch", requests);
         }
 
         public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
@@ -73,31 +73,23 @@ namespace Comb
             if (queryString != null)
                 url = string.Format("{0}?{1}", url, queryString);
 
-            try
+            using (var httpResponse = await httpClient.GetAsync(url).ConfigureAwait(false))
             {
-                using (var getResponse = await httpClient.GetAsync(url).ConfigureAwait(false))
+                using (var content = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var streamReader = new StreamReader(content, Encoding.UTF8))
+                using (var jsonReader = new JsonTextReader(streamReader))
                 {
-                    if (!getResponse.IsSuccessStatusCode)
-                        throw new NotImplementedException();
+                    if (!httpResponse.IsSuccessStatusCode)
+                        throw HandleError(httpResponse, streamReader, jsonReader);
 
-                    using (var content = await getResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                    using (var streamReader = new StreamReader(content, Encoding.UTF8))
-                    using (var jsonReader = new JsonTextReader(streamReader))
-                    {
-                        var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
-                        response.Status.Url = url;
-                        return response;
-                    }
+                    var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
+                    response.Status.Url = url;
+                    return response;
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
             }
         }
 
-        async Task<T> Post<T>(HttpClient httpClient, string url, object body)
+        async Task<T> PostDocuments<T>(HttpClient httpClient, string url, object body)
         {
             HttpContent input;
 
@@ -120,6 +112,18 @@ namespace Comb
                 }
             }
         }
+
+        Exception HandleError(HttpResponseMessage httpResponse, StreamReader streamReader, JsonTextReader jsonReader)
+        {
+            // TODO: 500 level errors should be marked Retry
+            // TODO: 400 level errors should be marked as bad input.
+            // TODO: Backoffs etc
+            // http://docs.aws.amazon.com/cloudsearch/latest/developerguide/error-handling.html
+            // http://docs.aws.amazon.com/general/latest/gr/api-retries.html
+
+            var response = _jsonSerializer.Deserialize<ErrorResponse>(jsonReader);
+
+            return new CloudSearchException(httpResponse.StatusCode, response.Message);
+        }
     }
 }
-

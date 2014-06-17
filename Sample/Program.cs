@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using Comb.StructuredQueries;
 
 namespace Comb.Sample
@@ -30,7 +30,9 @@ namespace Comb.Sample
                     })
                 })),
 */
-                Query = new StructuredQuery(new NotCondition(new StringCondition("literal", "NULL"))),
+                Query = new StructuredQuery(new AndCondition(new Collection<ICondition>
+                {
+                    new StringCondition("libteral", "NULL"), new StringCondition("liateral", "NULL")})),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
@@ -44,23 +46,46 @@ namespace Comb.Sample
                 Endpoint = SearchEndpoint
             });
 
-            var results = client.SearchAsync<Result>(query).Result;
-
-            Console.WriteLine("URL:      " + results.Status.Url);
-            Console.WriteLine("Resource: " + results.Status.ResourceId);
-            Console.WriteLine("Time:     " + results.Status.TimeMs);
-            Console.WriteLine("Found:    " + results.Hits.Found);
-            Console.WriteLine("Start:    " + results.Hits.Start);
-            Console.WriteLine("Returned: " + results.Hits.Hit.Length);
-            Console.WriteLine();
-
-            foreach (var hit in results.Hits.Hit)
+//            try
             {
-                Console.WriteLine(hit.Id);
-                Console.WriteLine(hit.Fields.Test);
-                Console.WriteLine(hit.Fields.Literal);
+                var results = client.SearchAsync<Result>(query).Result;
+
+                Console.WriteLine("URL:      " + results.Status.Url);
+                Console.WriteLine("Resource: " + results.Status.ResourceId);
+                Console.WriteLine("Time:     " + results.Status.TimeMs);
+                Console.WriteLine("Found:    " + results.Hits.Found);
+                Console.WriteLine("Start:    " + results.Hits.Start);
+                Console.WriteLine("Returned: " + results.Hits.Hit.Length);
                 Console.WriteLine();
+
+                foreach (var hit in results.Hits.Hit)
+                {
+                    Console.WriteLine(hit.Id);
+                    Console.WriteLine(hit.Fields.Test);
+                    Console.WriteLine(hit.Fields.Literal);
+                    Console.WriteLine();
+                }
             }
+                /*
+            catch (AggregateException ex)
+            {
+                foreach (var inner in ex.InnerExceptions)
+                {
+                    Console.WriteLine(inner.GetType().Name);
+
+                    var cloudSearchException = inner as CloudSearchException;
+
+                    if (cloudSearchException != null)
+                    {
+                        Console.WriteLine("Status: ({0}) {1}", (int) cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
+                        Console.WriteLine("Error:  " + inner.Message);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: " + inner.Message);
+                    }
+                }
+            }*/
         }
     }
 
