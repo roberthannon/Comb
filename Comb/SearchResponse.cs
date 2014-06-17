@@ -9,5 +9,11 @@
         /// the response, and an array that lists the document IDs and data for each hit.
         /// </summary>
         public Hits<T> Hits { get; set; }
+
+        public SearchResponse()
+        {
+            Status = new Status();
+            Hits = new Hits<T>();
+        }
     }
 }

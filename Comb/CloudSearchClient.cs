@@ -65,26 +65,28 @@ namespace Comb
             if (request.Sort.Any())
                 queryString["sort"] = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
 
-            return Get<SearchResponse<T>>(_searchClient, "search", queryString);
+            return RunSearch<T>(_searchClient, "search", queryString);
         }
 
-        async Task<T> Get<T>(HttpClient httpClient, string url, NameValueCollection queryString)
+        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, NameValueCollection queryString)
         {
             if (queryString != null)
                 url = string.Format("{0}?{1}", url, queryString);
 
             try
             {
-                using (var response = await httpClient.GetAsync(url).ConfigureAwait(false))
+                using (var getResponse = await httpClient.GetAsync(url).ConfigureAwait(false))
                 {
-                    if (!response.IsSuccessStatusCode)
+                    if (!getResponse.IsSuccessStatusCode)
                         throw new NotImplementedException();
 
-                    using (var content = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                    using (var content = await getResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
                     using (var streamReader = new StreamReader(content, Encoding.UTF8))
                     using (var jsonReader = new JsonTextReader(streamReader))
                     {
-                        return _jsonSerializer.Deserialize<T>(jsonReader);
+                        var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
+                        response.Status.Url = url;
+                        return response;
                     }
                 }
             }

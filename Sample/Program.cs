@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Comb.StructuredQueries;
 
 namespace Comb.Sample
@@ -29,7 +30,7 @@ namespace Comb.Sample
                     })
                 })),
 */
-                Query = new StructuredQuery(new NotCondition(new StringCondition("literal", "*"))),
+                Query = new StructuredQuery(new NotCondition(new StringCondition("literal", "NULL"))),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
@@ -44,6 +45,14 @@ namespace Comb.Sample
             });
 
             var results = client.SearchAsync<Result>(query).Result;
+
+            Console.WriteLine("URL:      " + results.Status.Url);
+            Console.WriteLine("Resource: " + results.Status.ResourceId);
+            Console.WriteLine("Time:     " + results.Status.TimeMs);
+            Console.WriteLine("Found:    " + results.Hits.Found);
+            Console.WriteLine("Start:    " + results.Hits.Start);
+            Console.WriteLine("Returned: " + results.Hits.Hit.Length);
+            Console.WriteLine();
 
             foreach (var hit in results.Hits.Hit)
             {
