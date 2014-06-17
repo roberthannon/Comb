@@ -7,7 +7,7 @@
     <description>$description$</description>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <releaseNotes>String encoding and error handling.</releaseNotes>
+    <releaseNotes>Better exception reporting.</releaseNotes>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/BarryDahlberg/Comb</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
