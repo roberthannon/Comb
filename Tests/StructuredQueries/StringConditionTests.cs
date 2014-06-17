@@ -21,13 +21,13 @@ namespace Comb.Tests.StructuredQueries
             Throws.ArgumentException.ForParameter("field"));
         }
 
-        [Test]
-        public void NullValuesThrowException()
+        [TestCase(null)]
+        [TestCase("")]
+        public void NullAndEmptyValuesThrowException(string value)
         {
-            // CloudSearch doesn't really have an explicit null so searching for it might do unexpected things
             Assert.That(() =>
             {
-                new StringCondition("field", null);
+                new StringCondition("field", value);
             },
             Throws.TypeOf<ArgumentNullException>().ForParameter("value"));
         }
@@ -64,9 +64,12 @@ namespace Comb.Tests.StructuredQueries
 
         [TestCase("/", "zurb:'/'")]
         [TestCase("\"", "zurb:'\"'")]
-        [TestCase("\\", "zurb:'\\'")]
         [TestCase("&", "zurb:'&'")]
+        [TestCase("<", "zurb:'<'")]
+        [TestCase(">", "zurb:'>'")]
+        [TestCase("\\", "zurb:'\\\\'")]
         [TestCase("'", "zurb:'\\''")]
+        [TestCase("'\\\f/", "zurb:'\\'\\\\/'")]
         public void ValuesAreEncodedIfRequired(string value, string expected)
         {
             // TODO: Verify these encodes in actual CloudSeach searches.

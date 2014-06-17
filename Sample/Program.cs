@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Comb.StructuredQueries;
 
 namespace Comb.Sample
 {
@@ -28,7 +29,7 @@ namespace Comb.Sample
                     })
                 })),
 */
-                Query = new MatchAllQuery(),
+                Query = new StructuredQuery(new NotCondition(new StringCondition("literal", "*"))),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
@@ -44,23 +45,19 @@ namespace Comb.Sample
 
             var results = client.SearchAsync<Result>(query).Result;
 
-            Console.WriteLine(results.Status.ResourceId);
-            Console.WriteLine(results.Status.TimeMs);
-            Console.WriteLine(results.Hits.Found);
-            Console.WriteLine(results.Hits.Start);
-
             foreach (var hit in results.Hits.Hit)
             {
-                Console.WriteLine(hit.Fields.Id);
+                Console.WriteLine(hit.Id);
                 Console.WriteLine(hit.Fields.Test);
+                Console.WriteLine(hit.Fields.Literal);
+                Console.WriteLine();
             }
         }
     }
 
     public class Result
     {
-        public string Id { get; set; }
-
         public string Test { get; set; }
+        public string Literal { get; set; }
     }
 }

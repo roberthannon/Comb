@@ -62,6 +62,7 @@
     <Compile Include="IdExpression.cs" />
     <Compile Include="MatchAllQuery.cs" />
     <Compile Include="Query.cs" />
+    <Compile Include="StructuredQueries\PrefixCondition.cs" />
     <Compile Include="StructuredQueries\StringCondition.cs" />
     <Compile Include="StructuredQueries\NotCondition.cs" />
     <Compile Include="StructuredQueries\OrCondition.cs" />
