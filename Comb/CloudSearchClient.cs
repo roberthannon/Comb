@@ -46,6 +46,11 @@ namespace Comb
             return PostDocuments<DocumentResponse>(_documentClient, "documents/batch", requests);
         }
 
+        public Task<SearchResponse<EmptyResult>> SearchAsync(SearchRequest request)
+        {
+            return SearchAsync<EmptyResult>(request);
+        }
+
         public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
         {
             var queryString = HttpUtility.ParseQueryString(String.Empty);

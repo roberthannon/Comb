@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmptyResult.cs" />
     <Compile Include="SearchException.cs" />
     <Compile Include="ErrorResponse.cs" />
     <Compile Include="SearchInfo.cs" />
