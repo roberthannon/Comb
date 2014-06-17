@@ -46,8 +46,6 @@ namespace Comb.StructuredQueries
         {
             get
             {
-                // TODO: String encode value.
-
                 var format = !string.IsNullOrWhiteSpace(_field)
                     ? "{0}:'{1}'"
                     : "'{1}'";

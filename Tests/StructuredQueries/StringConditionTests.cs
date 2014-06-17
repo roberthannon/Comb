@@ -72,7 +72,6 @@ namespace Comb.Tests.StructuredQueries
         [TestCase("'\\\f/", "zurb:'\\'\\\\/'")]
         public void ValuesAreEncodedIfRequired(string value, string expected)
         {
-            // TODO: Verify these encodes in actual CloudSeach searches.
             var condition = new StringCondition("zurb", value);
             var definition = condition.Definition;
 

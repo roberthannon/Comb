@@ -30,9 +30,10 @@ namespace Comb.Sample
                     })
                 })),
 */
-                Query = new StructuredQuery(new AndCondition(new Collection<ICondition>
+                Query = new StructuredQuery(new OrCondition(new Collection<ICondition>
                 {
-                    new StringCondition("libteral", "NULL"), new StringCondition("liateral", "NULL")})),
+                    new StringCondition("literal", "one")
+                }, 123)),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
@@ -46,7 +47,7 @@ namespace Comb.Sample
                 Endpoint = SearchEndpoint
             });
 
-//            try
+            try
             {
                 var results = client.SearchAsync<Result>(query).Result;
 
@@ -66,7 +67,6 @@ namespace Comb.Sample
                     Console.WriteLine();
                 }
             }
-                /*
             catch (AggregateException ex)
             {
                 foreach (var inner in ex.InnerExceptions)
@@ -85,7 +85,7 @@ namespace Comb.Sample
                         Console.WriteLine("Error: " + inner.Message);
                     }
                 }
-            }*/
+            }
         }
     }
 

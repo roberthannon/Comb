@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Comb.StructuredQueries
 {
@@ -33,8 +34,8 @@ namespace Comb.StructuredQueries
             if (terms == null)
                 throw new ArgumentNullException("terms");
 
-            if (terms.Count < 2)
-                throw new ArgumentOutOfRangeException("terms", "An OrCondition must have at least two terms.");
+            if (!terms.Any())
+                throw new ArgumentOutOfRangeException("terms", "An OrCondition must have at least one term.");
 
             _boost = boost;
             _terms = terms;

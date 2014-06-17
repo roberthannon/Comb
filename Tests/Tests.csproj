@@ -58,6 +58,8 @@
     <Compile Include="SearchAsyncTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StructuredQueries\NotConditionTests.cs" />
+    <Compile Include="StructuredQueries\AndConditionTests.cs" />
+    <Compile Include="Support\TestCondition.cs" />
     <Compile Include="Support\ConstraintExtensions.cs" />
     <Compile Include="StructuredQueries\OrConditionTests.cs" />
     <Compile Include="StructuredQueries\StringConditionTests.cs" />

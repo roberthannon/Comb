@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Permissions;
 using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
@@ -22,7 +21,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToOptions()
         {
-            var condition = new NotCondition(new TestCondition(), 456);
+            var condition = new NotCondition(new TestCondition("TEST"), 456);
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -33,33 +32,28 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void NullBoostIsIgnored()
         {
-            var condition = new NotCondition(new TestCondition());
+            var condition = new NotCondition(new TestCondition("TEST"));
             
             Assert.That(condition.Boost, Is.Null);
             Assert.That(!condition.Options.Any());
         }
 
         [Test]
-        public void TermIsWrapped()
-        {
-            var condition = new NotCondition(new TestCondition());
-            var definition = condition.Definition;
-
-            Assert.That(definition, Is.EqualTo("(not TEST)"));
-        }
-
-        [Test]
         public void BoostIsAddedToDefinition()
         {
-            var condition = new NotCondition(new TestCondition(), 3);
+            var condition = new NotCondition(new TestCondition("TEST"), 3);
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(not boost=3 TEST)"));
         }
 
-        class TestCondition : ICondition
+        [Test]
+        public void TermIsWrapped()
         {
-            public string Definition { get { return "TEST"; } }
+            var condition = new NotCondition(new TestCondition("TEST"));
+            var definition = condition.Definition;
+
+            Assert.That(definition, Is.EqualTo("(not TEST)"));
         }
     }
 }
