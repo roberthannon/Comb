@@ -2,6 +2,8 @@
 {
     public class SearchResponse<T>
     {
+        public SearchInfo Info { get; set; }
+
         public Status Status { get; set; }
 
         /// <summary>

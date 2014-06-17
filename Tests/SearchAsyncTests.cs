@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
 
@@ -27,14 +29,60 @@ namespace Comb.Tests
         }
 
         [Test]
-        public async void Boop()
+        public async void InfoIncludesDetailsOfSimpleQuery()
         {
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop")
             });
 
-            Assert.That(response.Hits.Found == 0);
+            Assert.That(response.Info.Parser, Is.EqualTo("simple"));
+            Assert.That(response.Info.Query,  Is.EqualTo("boop"));
+            Assert.That(response.Info.Url,    Is.EqualTo("search?q=boop&q.parser=simple"));
+        }
+
+        [Test]
+        public async void InfoIncludesDetailsOfStructuredQuery()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new StructuredQuery(new StringCondition("one", "two"))
+            });
+
+            Assert.That(response.Info.Parser, Is.EqualTo("structured"));
+            Assert.That(response.Info.Query,  Is.EqualTo("one:'two'"));
+            Assert.That(response.Info.Url,    Is.EqualTo("search?q=one%3a%27two%27&q.parser=structured"));
+        }
+
+        [Test]
+        public async void InfoIncludesSizeAndStart()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("abc"),
+                Size = 123,
+                Start = 456
+            });
+
+            Assert.That(response.Info.Size,  Is.EqualTo("123"));
+            Assert.That(response.Info.Start, Is.EqualTo("456"));
+        }
+
+        [Test]
+        public async void InfoIncludesSortExpression()
+        {
+            var expression = new CustomExpression("one", "two");
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("boop"),
+                Sort = new List<Sort>
+                {
+                    new Sort(expression, SortDirection.Descending),
+                    new Sort(Expression.Id, SortDirection.Ascending)
+                }
+            });
+
+            Assert.That(response.Info.Sort, Is.EqualTo("one desc,_id asc"));
         }
 
         public class Result

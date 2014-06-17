@@ -51,7 +51,7 @@ namespace Comb.Sample
             {
                 var results = client.SearchAsync<Result>(query).Result;
 
-                Console.WriteLine("URL:      " + results.Status.Url);
+                Console.WriteLine("URL:      " + results.Info.Url);
                 Console.WriteLine("Resource: " + results.Status.ResourceId);
                 Console.WriteLine("Time:     " + results.Status.TimeMs);
                 Console.WriteLine("Found:    " + results.Hits.Found);

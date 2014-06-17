@@ -16,10 +16,5 @@ namespace Comb
         /// </summary>
         [JsonProperty("time-ms")]
         public int TimeMs { get; set; }
-
-        /// <summary>
-        /// The actual URL used to perform the search.
-        /// </summary>
-        public string Url { get; set; }
     }
 }

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="CloudSearchException.cs" />
     <Compile Include="ErrorResponse.cs" />
+    <Compile Include="SearchInfo.cs" />
     <Compile Include="SortDirection.cs" />
     <Compile Include="Sort.cs" />
     <Compile Include="Expression.cs" />

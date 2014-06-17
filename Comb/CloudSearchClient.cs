@@ -49,26 +49,27 @@ namespace Comb
         public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
         {
             var queryString = HttpUtility.ParseQueryString(String.Empty);
+            var info = new SearchInfo();
 
             if (request.Query != null)
             {
-                queryString["q"] = request.Query.Definition;
-                queryString["q.parser"] = request.Query.Parser;
+                queryString["q"]        = info.Query  = request.Query.Definition;
+                queryString["q.parser"] = info.Parser = request.Query.Parser;
             }
 
             if (request.Start.HasValue)
-                queryString["start"] = request.Start.ToString();
+                queryString["start"] = info.Start = request.Start.ToString();
 
             if (request.Size.HasValue)
-                queryString["size"] = request.Size.ToString();
+                queryString["size"] = info.Size = request.Size.ToString();
 
             if (request.Sort.Any())
-                queryString["sort"] = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
+                queryString["sort"] = info.Sort = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
 
-            return RunSearch<T>(_searchClient, "search", queryString);
+            return RunSearch<T>(_searchClient, "search", queryString, info);
         }
 
-        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, NameValueCollection queryString)
+        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, NameValueCollection queryString, SearchInfo info)
         {
             if (queryString != null)
                 url = string.Format("{0}?{1}", url, queryString);
@@ -83,7 +84,8 @@ namespace Comb
                         throw HandleError(httpResponse, streamReader, jsonReader);
 
                     var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
-                    response.Status.Url = url;
+                    response.Info = info;
+                    response.Info.Url = url;
                     return response;
                 }
             }
