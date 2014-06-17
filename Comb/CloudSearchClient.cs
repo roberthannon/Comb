@@ -72,7 +72,7 @@ namespace Comb
         async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, NameValueCollection queryString, SearchInfo info)
         {
             if (queryString != null)
-                url = string.Format("{0}?{1}", url, queryString);
+                url = info.Url = string.Format("{0}?{1}", url, queryString);
 
             using (var httpResponse = await httpClient.GetAsync(url).ConfigureAwait(false))
             {
@@ -81,11 +81,10 @@ namespace Comb
                 using (var jsonReader = new JsonTextReader(streamReader))
                 {
                     if (!httpResponse.IsSuccessStatusCode)
-                        throw HandleError(httpResponse, streamReader, jsonReader);
+                        throw HandleError(httpResponse, streamReader, jsonReader, info);
 
                     var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
-                    response.Info = info;
-                    response.Info.Url = url;
+                    response.Request = info;
                     return response;
                 }
             }
@@ -115,7 +114,7 @@ namespace Comb
             }
         }
 
-        Exception HandleError(HttpResponseMessage httpResponse, StreamReader streamReader, JsonTextReader jsonReader)
+        Exception HandleError(HttpResponseMessage httpResponse, StreamReader streamReader, JsonTextReader jsonReader, SearchInfo info)
         {
             // TODO: 500 level errors should be marked Retry
             // TODO: 400 level errors should be marked as bad input.
@@ -125,7 +124,7 @@ namespace Comb
 
             var response = _jsonSerializer.Deserialize<ErrorResponse>(jsonReader);
 
-            return new CloudSearchException(httpResponse.StatusCode, response.Message);
+            return new SearchException(info, httpResponse.StatusCode, response.Message);
         }
     }
 }

@@ -66,6 +66,7 @@
     <Compile Include="Support\TestHttpClientFactory.cs" />
     <Compile Include="Support\TestHttpContent.cs" />
     <Compile Include="Support\TestHttpMessageHandlerStub.cs" />
+    <Compile Include="Support\ResponseSamples.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

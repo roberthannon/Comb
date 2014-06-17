@@ -6,18 +6,18 @@ namespace Comb.Tests.Support
 {
     class TestHttpMessageHandler : HttpMessageHandler
     {
-        readonly HttpResponseMessage _response;
+        public HttpResponseMessage Response { get; set; }
 
-        public TestHttpMessageHandler(HttpResponseMessage response)
+        public TestHttpMessageHandler()
         {
-            _response = response;
+            Response = ResponseSamples.OK();
         }
 
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            return Task.FromResult(_response);
+            return Task.FromResult(Response);
         }
     }
 }

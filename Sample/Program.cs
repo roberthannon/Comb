@@ -51,7 +51,7 @@ namespace Comb.Sample
             {
                 var results = client.SearchAsync<Result>(query).Result;
 
-                Console.WriteLine("URL:      " + results.Info.Url);
+                Console.WriteLine("URL:      " + results.Request.Url);
                 Console.WriteLine("Resource: " + results.Status.ResourceId);
                 Console.WriteLine("Time:     " + results.Status.TimeMs);
                 Console.WriteLine("Found:    " + results.Hits.Found);
@@ -73,7 +73,7 @@ namespace Comb.Sample
                 {
                     Console.WriteLine(inner.GetType().Name);
 
-                    var cloudSearchException = inner as CloudSearchException;
+                    var cloudSearchException = inner as SearchException;
 
                     if (cloudSearchException != null)
                     {

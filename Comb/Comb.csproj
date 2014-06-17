@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CloudSearchException.cs" />
+    <Compile Include="SearchException.cs" />
     <Compile Include="ErrorResponse.cs" />
     <Compile Include="SearchInfo.cs" />
     <Compile Include="SortDirection.cs" />
