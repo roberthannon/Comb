@@ -38,5 +38,20 @@ namespace Comb.Tests.Support
                 }")
             };
         }
+
+        public static HttpResponseMessage InternalServerError(string message = "Bad news.")
+        {
+            return new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Content = new TestHttpContent(@"{
+	                ""error"" : {
+		                ""rid"" : ""iPXcuuooRwr7hS0=""
+	                },
+	                ""message"" : """ + message + @""",
+	                ""__type"" : ""#SearchException""
+                }")
+            };
+        }
     }
 }

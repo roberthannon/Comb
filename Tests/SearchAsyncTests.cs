@@ -79,7 +79,7 @@ namespace Comb.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(SearchException))]
+        [ExpectedException(typeof(SearchException), ExpectedMessage = "Failure!")]
         public async void BadRequestThrowsException()
         {
             _httpHandler.Response = ResponseSamples.BadRequest("Failure!");
@@ -93,7 +93,7 @@ namespace Comb.Tests
         [Test]
         public async void BadRequestIncludesInfoInException()
         {
-            _httpHandler.Response = ResponseSamples.BadRequest("Failure!");
+            _httpHandler.Response = ResponseSamples.BadRequest();
 
             try
             {
@@ -105,8 +105,56 @@ namespace Comb.Tests
             catch (SearchException ex)
             {
                 Assert.That(ex.Request.Parser, Is.EqualTo("simple"));
-                Assert.That(ex.Request.Query, Is.EqualTo("123"));
-                Assert.That(ex.Request.Url, Is.EqualTo("search?q=123&q.parser=simple"));
+                Assert.That(ex.Request.Query,  Is.EqualTo("123"));
+                Assert.That(ex.Request.Url,    Is.EqualTo("search?q=123&q.parser=simple"));
+            }
+        }
+
+        [Test]
+        public async void BadRequestsShouldNotBeRetried()
+        {
+            _httpHandler.Response = ResponseSamples.BadRequest();
+
+            try
+            {
+                await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+                {
+                    Query = new SimpleQuery("123")
+                });
+            }
+            catch (SearchException ex)
+            {
+                Assert.That(ex.ShouldRetry, Is.False);
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(SearchException), ExpectedMessage = "Oh god no!")]
+        public async void InternalServerErrorThrowsException()
+        {
+            _httpHandler.Response = ResponseSamples.InternalServerError("Oh god no!");
+
+            await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("123")
+            });
+        }
+
+        [Test]
+        public async void InternalServerErrorsShouldBeRetried()
+        {
+            _httpHandler.Response = ResponseSamples.InternalServerError();
+
+            try
+            {
+                await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+                {
+                    Query = new SimpleQuery("123")
+                });
+            }
+            catch (SearchException ex)
+            {
+                Assert.That(ex.ShouldRetry, Is.True);
             }
         }
 
