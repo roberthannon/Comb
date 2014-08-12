@@ -3,38 +3,13 @@ using System.Collections.Generic;
 
 namespace Comb.StructuredQueries
 {
-    public class NotCondition : GroupCondition
+    public class NotCondition : UniOperator
     {
-        readonly uint? _boost;
-        readonly ICondition _term;
-
-        public uint? Boost
+        public NotCondition(IOperand operand, uint? boost = null, string field = null)
+            : base("not", operand)
         {
-            get { return _boost; }
-        }
-
-        public override IEnumerable<Option> Options
-        {
-            get
-            {
-                if (_boost.HasValue)
-                    yield return new Option("boost", _boost.ToString());
-            }
-        }
-
-        public override IEnumerable<ICondition> Terms
-        {
-            get { yield return _term; }
-        }
-
-        public NotCondition(ICondition term, uint? boost = null)
-            : base("not")
-        {
-            if (term == null)
-                throw new ArgumentNullException("term");
-
-            _boost = boost;
-            _term = term;
+            Field = field;
+            Boost = boost;
         }
     }
 }

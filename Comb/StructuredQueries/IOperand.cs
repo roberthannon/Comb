@@ -1,6 +1,6 @@
 ﻿namespace Comb.StructuredQueries
 {
-    public interface ICondition
+    public interface IOperand
     {
         string Definition { get; }
     }
