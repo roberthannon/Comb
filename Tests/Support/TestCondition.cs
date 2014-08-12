@@ -2,7 +2,7 @@
 
 namespace Comb.Tests.Support
 {
-    class TestCondition : ICondition
+    class TestCondition : IOperand
     {
         public string Definition { get; private set; }
 

@@ -30,10 +30,7 @@ namespace Comb.Sample
                     })
                 })),
 */
-                Query = new StructuredQuery(new OrCondition(new Collection<ICondition>
-                {
-                    new StringCondition("literal", "one")
-                }, 123)),
+                Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>

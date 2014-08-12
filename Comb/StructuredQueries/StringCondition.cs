@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Comb.StructuredQueries
 {
-    public class StringCondition : ICondition
+    public class StringCondition : IOperand
     {
         readonly string _field;
         readonly string _value;
