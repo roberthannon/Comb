@@ -26,7 +26,7 @@ namespace Comb.StructuredQueries
             Operands = operands;
         }
 
-        protected Operator(string opcode, IEnumerable<IOperand> operands)
+        protected Operator(string opcode, ICollection<IOperand> operands)
             : this(opcode)
         {
             if (operands == null)
@@ -50,6 +50,7 @@ namespace Comb.StructuredQueries
             {
                 if (!string.IsNullOrEmpty(Field))
                     yield return new Option("field", Field);
+
                 if (Boost.HasValue)
                     yield return new Option("boost", Boost.ToString());
             }
