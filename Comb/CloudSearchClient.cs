@@ -71,6 +71,9 @@ namespace Comb
             if (request.Sort.Any())
                 queryString["sort"] = info.Sort = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
 
+            if (request.Return.Any())
+                queryString["return"] = info.Return = string.Join(",", request.Return);
+
             return RunSearch<T>(_searchClient, "search", queryString, info);
         }
 

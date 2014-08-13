@@ -11,5 +11,6 @@
         public string Size   { get; set; }
         public string Start  { get; set; }
         public string Sort   { get; set; }
+        public string Return { get; set; }
     }
 }

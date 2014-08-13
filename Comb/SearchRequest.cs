@@ -11,9 +11,12 @@ namespace Comb
 
         public Query Query { get; set; }
 
+        public List<string> Return { get; set; }
+
         public SearchRequest()
         {
             Sort = new List<Sort>();
+            Return = new List<string>();
         }
     }
 }

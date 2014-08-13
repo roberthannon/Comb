@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Comb.StructuredQueries;
+using Newtonsoft.Json;
 
 namespace Comb.Sample
 {
@@ -18,23 +19,28 @@ namespace Comb.Sample
 
             var query = new SearchRequest
             {
-//              Query = new SimpleQuery("boop |beep -bing"),
-/*              Query = new StructuredQuery(new AndCondition(new Condition[]
+                //Query = new SimpleQuery("boop |beep -bing"),
+                Query = new StructuredQuery(new AndCondition(new IOperand[]
                 {
                     new StringCondition("test", "boop"),
-                    new AndCondition(new[]
-                    {
-                        new StringCondition("Beep"), 
-                        new StringCondition("Bing")
-                    })
+                    new StringCondition("beep"),
+                    //new AndCondition(new[]
+                    //{
+                    //    new StringCondition("Beep"), 
+                    //    new StringCondition("Bing")
+                    //})
                 })),
-*/
-                Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
+                //Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
                 {
                     new Sort(Silly, SortDirection.Descending)
+                },
+                Return = new List<string>
+                {
+                    "_all_fields",
+                    "_score",
                 }
             };
 
@@ -60,6 +66,7 @@ namespace Comb.Sample
                     Console.WriteLine(hit.Id);
                     Console.WriteLine(hit.Fields.Test);
                     Console.WriteLine(hit.Fields.Literal);
+                    Console.WriteLine(hit.Fields.Score);
                     Console.WriteLine();
                 }
             }
@@ -88,6 +95,10 @@ namespace Comb.Sample
     public class Result
     {
         public string Test { get; set; }
+        
         public string Literal { get; set; }
+        
+        [JsonProperty("_score")]
+        public float Score { get; set; }
     }
 }
