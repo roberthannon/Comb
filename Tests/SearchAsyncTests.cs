@@ -79,6 +79,19 @@ namespace Comb.Tests
         }
 
         [Test]
+        public async void InfoIncludesReturnFields()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new StructuredQuery(new StringCondition("yellow")),
+                Return = new List<string> { "this", "that" }
+            });
+
+            Assert.That(response.Request.Return, Is.EqualTo("this,that"));
+            Assert.That(response.Request.Url, Contains.Substring("&return=this%2cthat"));
+        }
+
+        [Test]
         [ExpectedException(typeof(SearchException), ExpectedMessage = "Failure!")]
         public async void BadRequestThrowsException()
         {
