@@ -9,8 +9,8 @@ namespace Comb.Sample
     {
         const string SearchEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
 
-        public static readonly DomainExpression Silly = new DomainExpression("silly");
-        public static readonly DomainExpression Test = new DomainExpression("test");
+        public static readonly Field Silly = new Field("silly");
+        public static readonly Field Test = new Field("test");
 
         static void Main()
         {
@@ -37,10 +37,10 @@ namespace Comb.Sample
                 {
                     new Sort(Silly, SortDirection.Descending)
                 },
-                Return = new List<string>
+                Return = new List<Return>
                 {
-                    "_all_fields",
-                    "_score",
+                    Return.AllFields,
+                    Return.Score,
                 }
             };
 
@@ -97,8 +97,8 @@ namespace Comb.Sample
         public string Test { get; set; }
         
         public string Literal { get; set; }
-        
-        [JsonProperty("_score")]
+
+        [JsonProperty(Constants.Fields.Score)]
         public float Score { get; set; }
     }
 }

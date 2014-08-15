@@ -47,12 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmptyResult.cs" />
+    <Compile Include="Field\IField.cs" />
+    <Compile Include="Field\Expression\IExpression.cs" />
+    <Compile Include="Return\Return.cs" />
+    <Compile Include="Return\ReturnFields.cs" />
     <Compile Include="SearchException.cs" />
     <Compile Include="ErrorResponse.cs" />
     <Compile Include="SearchInfo.cs" />
-    <Compile Include="SortDirection.cs" />
-    <Compile Include="Sort.cs" />
-    <Compile Include="Expression.cs" />
+    <Compile Include="Sort\SortFields.cs" />
+    <Compile Include="Sort\SortDirection.cs" />
+    <Compile Include="Sort\Sort.cs" />
     <Compile Include="CloudSearchSettings.cs" />
     <Compile Include="HttpClientFactory.cs" />
     <Compile Include="Constants.cs" />
@@ -61,9 +65,8 @@
     <Compile Include="DocumentRequest.cs" />
     <Compile Include="DocumentResponse.cs" />
     <Compile Include="IHttpClientFactory.cs" />
-    <Compile Include="CustomExpression.cs" />
-    <Compile Include="FieldExpression.cs" />
-    <Compile Include="IdExpression.cs" />
+    <Compile Include="Field\Expression\Expression.cs" />
+    <Compile Include="Field\Field.cs" />
     <Compile Include="MatchAllQuery.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="SearchRequest.cs" />
@@ -78,7 +81,6 @@
     <Compile Include="StructuredQueries\StringCondition.cs" />
     <Compile Include="StructuredQueries\StructuredQuery.cs" />
     <Compile Include="StructuredQueries\UniOperator.cs" />
-    <Compile Include="VersionExpression.cs" />
     <Compile Include="Hit.cs" />
     <Compile Include="Hits.cs" />
     <Compile Include="ICloudSearchClient.cs" />
