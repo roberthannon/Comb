@@ -22,7 +22,7 @@ namespace Comb
         /// </summary>
         public static readonly ReadOnlyCollection<string> ReservedFieldNames = Array.AsReadOnly(new[]
         {
-            "score"
+            "score" // TODO put in all Constants.Fields values?
         });
 
         /// <summary>
