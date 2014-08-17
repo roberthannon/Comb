@@ -2,17 +2,16 @@
 {
     /// <summary>
     /// Already defined in the search domain.
-    /// 
     /// </summary>
-    public class DomainExpression : Expression
+    public class Field : IField
     {
         readonly string _name;
 
-        public DomainExpression(string name)
+        public Field(string name)
         {
             _name = name;
         }
 
-        public override string Name { get { return _name; } }
+        public string Name { get { return _name; } }
     }
 }

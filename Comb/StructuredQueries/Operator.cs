@@ -40,7 +40,7 @@ namespace Comb.StructuredQueries
 
         public string Opcode { get; private set; }
 
-        public string Field { get; protected set; }
+        public string Field { get; protected set; } // TODO change to IField instance?
 
         public uint? Boost { get; protected set; }
 

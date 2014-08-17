@@ -5,18 +5,18 @@ namespace Comb.StructuredQueries
 {
     public class StringCondition : IOperand
     {
-        readonly string _field;
+        readonly IField _field;
         readonly string _value;
 
-        public StringCondition(string field, string value)
+        public StringCondition(IField field, string value)
         {
-            if (!string.IsNullOrEmpty(field))
+            if (field != null && !string.IsNullOrEmpty(field.Name))
             {
-                if (!Regex.IsMatch(field, Constants.FieldNameFormat))
-                    throw new ArgumentException(string.Format("Invalid field name: {0}", field), "field");
+                if (!Regex.IsMatch(field.Name, Constants.FieldNameFormat))
+                    throw new ArgumentException(string.Format("Invalid field name: {0}", field.Name), "field");
 
-                if (Constants.ReservedFieldNames.Contains(field))
-                    throw new ArgumentException(string.Format("Reserved field name: {0}", field), "field");
+                if (Constants.ReservedFieldNames.Contains(field.Name))
+                    throw new ArgumentException(string.Format("Reserved field name: {0}", field.Name), "field");
 
                 _field = field;
             }
@@ -33,12 +33,16 @@ namespace Comb.StructuredQueries
                     "value like \"NULL\" if you want to be able to search for it explicitly.");
             }
 
-            _field = field;
             _value = value;
         }
 
+        public StringCondition(string fieldName, string value)
+            : this(new Field(fieldName), value)
+        {
+        }
+
         public StringCondition(string value)
-            : this(null, value)
+            : this((IField)null, value)
         {
         }
 
@@ -46,11 +50,9 @@ namespace Comb.StructuredQueries
         {
             get
             {
-                var format = !string.IsNullOrWhiteSpace(_field)
-                    ? "{0}:'{1}'"
-                    : "'{1}'";
-
-                return string.Format(format, _field, EncodeValue(_value));
+                if (_field != null && !string.IsNullOrWhiteSpace(_field.Name))
+                    return string.Format("{0}:'{1}'", _field.Name, EncodeValue(_value));
+                return string.Format("'{0}'", EncodeValue(_value));
             }
         }
 

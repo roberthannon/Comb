@@ -71,6 +71,20 @@ namespace Comb
             if (request.Sort.Any())
                 queryString["sort"] = info.Sort = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
 
+            if (request.Return.Any())
+                queryString["return"] = info.Return = string.Join(",", request.Return);
+
+            if (request.Expressions.Any())
+            {
+                info.Expressions = request.Expressions.Select((expression, i) =>
+                {
+                    var queryParamName = string.Format("expr.{0}", expression.Name);
+                    var queryParamValue = expression.Definition;
+                    queryString[queryParamName] = queryParamValue;
+                    return new KeyValuePair<string, string>(queryParamName, queryParamValue);
+                }).ToArray();
+            }
+
             return RunSearch<T>(_searchClient, "search", queryString, info);
         }
 

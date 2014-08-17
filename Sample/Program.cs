@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Comb.StructuredQueries;
+using Newtonsoft.Json;
 
 namespace Comb.Sample
 {
@@ -8,8 +9,8 @@ namespace Comb.Sample
     {
         const string SearchEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
 
-        public static readonly DomainExpression Silly = new DomainExpression("silly");
-        public static readonly DomainExpression Test = new DomainExpression("test");
+        public static readonly Field Silly = new Field("silly");
+        public static readonly Field Test = new Field("test");
 
         static void Main()
         {
@@ -18,23 +19,28 @@ namespace Comb.Sample
 
             var query = new SearchRequest
             {
-//              Query = new SimpleQuery("boop |beep -bing"),
-/*              Query = new StructuredQuery(new AndCondition(new Condition[]
+                //Query = new SimpleQuery("boop |beep -bing"),
+                Query = new StructuredQuery(new AndCondition(new IOperand[]
                 {
                     new StringCondition("test", "boop"),
-                    new AndCondition(new[]
-                    {
-                        new StringCondition("Beep"), 
-                        new StringCondition("Bing")
-                    })
+                    new StringCondition("beep"),
+                    //new AndCondition(new[]
+                    //{
+                    //    new StringCondition("Beep"), 
+                    //    new StringCondition("Bing")
+                    //})
                 })),
-*/
-                Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
+                //Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
                 Start = 0,
                 Size = 20,
                 Sort = new List<Sort>
                 {
                     new Sort(Silly, SortDirection.Descending)
+                },
+                Return = new List<Return>
+                {
+                    Return.AllFields,
+                    Return.Score,
                 }
             };
 
@@ -60,6 +66,7 @@ namespace Comb.Sample
                     Console.WriteLine(hit.Id);
                     Console.WriteLine(hit.Fields.Test);
                     Console.WriteLine(hit.Fields.Literal);
+                    Console.WriteLine(hit.Fields.Score);
                     Console.WriteLine();
                 }
             }
@@ -88,6 +95,10 @@ namespace Comb.Sample
     public class Result
     {
         public string Test { get; set; }
+        
         public string Literal { get; set; }
+
+        [JsonProperty(Constants.Fields.Score)]
+        public float Score { get; set; }
     }
 }

@@ -64,18 +64,51 @@ namespace Comb.Tests
         [Test]
         public async void InfoIncludesSortExpression()
         {
-            var expression = new CustomExpression("one", "two");
+            var expression = new Expression("one", "two*three+four");
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
                 Sort = new List<Sort>
                 {
                     new Sort(expression, SortDirection.Descending),
-                    new Sort(Expression.Id, SortDirection.Ascending)
+                    new Sort(SortFields.Id, SortDirection.Ascending)
                 }
             });
 
             Assert.That(response.Request.Sort, Is.EqualTo("one desc,_id asc"));
+            Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.one", "two*three+four")));
+            Assert.That(response.Request.Url, Contains.Substring("expr.one=two*three%2bfour"));
+        }
+
+        [Test]
+        public async void InfoIncludesReturnFields()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new StructuredQuery(new StringCondition("yellow")),
+                Return = new List<Return> { new Return("this"), new Return("that"), Return.Score }
+            });
+
+            Assert.That(response.Request.Return, Is.EqualTo("this,that,_score"));
+            Assert.That(response.Request.Url, Contains.Substring("&return=this%2cthat%2c_score"));
+        }
+
+        [Test]
+        public async void InfoIncludesReturnExpression()
+        {
+            var expression = new Expression("one", "two*three+four");
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("boop"),
+                Return = new List<Return>
+                {
+                    new Return(expression)
+                }
+            });
+
+            Assert.That(response.Request.Return, Is.EqualTo("one"));
+            Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.one", "two*three+four")));
+            Assert.That(response.Request.Url, Contains.Substring("expr.one=two*three%2bfour"));
         }
 
         [Test]
