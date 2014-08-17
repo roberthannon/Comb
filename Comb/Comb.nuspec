@@ -7,7 +7,7 @@
     <description>$description$</description>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <releaseNotes>Better exception reporting.</releaseNotes>
+    <releaseNotes>Support for return fields.</releaseNotes>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/BarryDahlberg/Comb</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
