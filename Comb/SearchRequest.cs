@@ -1,13 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Comb.StructuredQueries;
+using System.Collections.Generic;
 
 namespace Comb
 {
     public class SearchRequest
     {
-        public uint? Start { get; set; }
-        public uint? Size { get; set; }
-
         public Query Query { get; set; }
+
+        /// <summary>
+        /// Use to filter the documents that match the search criteria specified with the <see cref="Query"/>
+        /// parameter without affecting the relevance scores of the documents included in the search results.
+        /// Only supports structured queries.
+        /// </summary>
+        public StructuredQuery Filter { get; set; }
+
+        public uint? Start { get; set; }
+
+        public uint? Size { get; set; }
 
         public List<Sort> Sort { get; set; }
 

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Comb.StructuredQueries;
+﻿using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Comb.Tests
 {
@@ -108,7 +108,20 @@ namespace Comb.Tests
 
             Assert.That(response.Request.Return, Is.EqualTo("one"));
             Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.one", "two*three+four")));
-            Assert.That(response.Request.Url, Contains.Substring("expr.one=two*three%2bfour"));
+            Assert.That(response.Request.Url, Contains.Substring("&expr.one=two*three%2bfour"));
+        }
+
+        [Test]
+        public async void InfoIncludesFilterQuery()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("boop"),
+                Filter = new StructuredQuery(new AndCondition(new[] { new StringCondition("somefield", "thingy 1"), new StringCondition("thingy 2") }))
+            });
+
+            Assert.That(response.Request.Filter, Is.EqualTo("(and somefield:'thingy 1' 'thingy 2')"));
+            Assert.That(response.Request.Url, Contains.Substring("&fq=(and+somefield%3a%27thingy+1%27+%27thingy+2%27)"));
         }
 
         [Test]
