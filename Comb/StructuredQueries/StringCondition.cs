@@ -5,9 +5,6 @@ namespace Comb.StructuredQueries
 {
     public class StringCondition : IOperand
     {
-        readonly IField _field;
-        readonly string _value;
-
         public StringCondition(IField field, string value)
         {
             if (field != null && !string.IsNullOrEmpty(field.Name))
@@ -18,11 +15,11 @@ namespace Comb.StructuredQueries
                 if (Constants.ReservedFieldNames.Contains(field.Name))
                     throw new ArgumentException(string.Format("Reserved field name: {0}", field.Name), "field");
 
-                _field = field;
+                Field = field;
             }
             else
             {
-                _field = null;
+                Field = null;
             }
 
             if (string.IsNullOrEmpty(value))
@@ -33,7 +30,7 @@ namespace Comb.StructuredQueries
                     "value like \"NULL\" if you want to be able to search for it explicitly.");
             }
 
-            _value = value;
+            Value = value;
         }
 
         public StringCondition(string fieldName, string value)
@@ -46,13 +43,17 @@ namespace Comb.StructuredQueries
         {
         }
 
+        public IField Field { get; private set; }
+
+        public string Value { get; private set; }
+
         public string Definition
         {
             get
             {
-                if (_field != null && !string.IsNullOrWhiteSpace(_field.Name))
-                    return string.Format("{0}:'{1}'", _field.Name, EncodeValue(_value));
-                return string.Format("'{0}'", EncodeValue(_value));
+                if (Field != null && !string.IsNullOrWhiteSpace(Field.Name))
+                    return string.Format("{0}:'{1}'", Field.Name, EncodeValue(Value));
+                return string.Format("'{0}'", EncodeValue(Value));
             }
         }
 

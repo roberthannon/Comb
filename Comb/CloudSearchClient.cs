@@ -62,6 +62,11 @@ namespace Comb
                 queryString["q.parser"] = info.Parser = request.Query.Parser;
             }
 
+            if (request.Filter != null)
+            {
+                queryString["fq"] = info.Filter = request.Filter.Definition;
+            }
+
             if (request.Start.HasValue)
                 queryString["start"] = info.Start = request.Start.ToString();
 
