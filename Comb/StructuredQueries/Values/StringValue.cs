@@ -3,25 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace Comb.StructuredQueries
 {
-    public class StringCondition : IOperand
+    public class StringValue : IOperand
     {
-        public StringCondition(IField field, string value)
+        readonly string _value;
+
+        public StringValue(string value)
         {
-            if (field != null && !string.IsNullOrEmpty(field.Name))
-            {
-                if (!Regex.IsMatch(field.Name, Constants.FieldNameFormat))
-                    throw new ArgumentException(string.Format("Invalid field name: {0}", field.Name), "field");
-
-                if (Constants.ReservedFieldNames.Contains(field.Name))
-                    throw new ArgumentException(string.Format("Reserved field name: {0}", field.Name), "field");
-
-                Field = field;
-            }
-            else
-            {
-                Field = null;
-            }
-
             if (string.IsNullOrEmpty(value))
             {
                 throw new ArgumentNullException("value",
@@ -30,31 +17,14 @@ namespace Comb.StructuredQueries
                     "value like \"NULL\" if you want to be able to search for it explicitly.");
             }
 
-            Value = value;
+            _value = value;
         }
 
-        public StringCondition(string fieldName, string value)
-            : this(new Field(fieldName), value)
-        {
-        }
-
-        public StringCondition(string value)
-            : this((IField)null, value)
-        {
-        }
-
-        public IField Field { get; private set; }
-
-        public string Value { get; private set; }
+        public string Value { get { return _value; } }
 
         public string Definition
         {
-            get
-            {
-                if (Field != null && !string.IsNullOrWhiteSpace(Field.Name))
-                    return string.Format("{0}:'{1}'", Field.Name, EncodeValue(Value));
-                return string.Format("'{0}'", EncodeValue(Value));
-            }
+            get { return string.Format("'{0}'", EncodeValue(Value)); }
         }
 
         string EncodeValue(string value)

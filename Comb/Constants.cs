@@ -35,5 +35,10 @@ namespace Comb
             public const string AllFields = "_all_fields";
             public const string Score = "_score";
         }
+
+        /// <summary>
+        /// The format of dates used for CloudSearch queries and indexing.
+        /// </summary>
+        public const string DateFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
     }
 }

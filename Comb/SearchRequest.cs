@@ -18,9 +18,9 @@ namespace Comb
 
         public uint? Size { get; set; }
 
-        public List<Sort> Sort { get; set; }
+        public ICollection<Sort> Sort { get; set; }
 
-        public List<Return> Return { get; set; }
+        public ICollection<Return> Return { get; set; }
 
         public IEnumerable<IExpression> Expressions
         {

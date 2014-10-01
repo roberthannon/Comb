@@ -1,3 +1,5 @@
+using System;
+
 namespace Comb
 {
     /// <summary>
@@ -10,6 +12,12 @@ namespace Comb
 
         public Expression(string name, string definition)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
+
+            if (definition == null)
+                throw new ArgumentNullException("definition");
+
             _name = name;
             _definition = definition;
         }

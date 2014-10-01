@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Comb.StructuredQueries
 {
+    /// <summary>
+    /// Several operators only take one operand. Convenient base class for those operators.
+    /// </summary>
     public abstract class UniOperator : Operator
     {
-        protected UniOperator(string opcode)
-            : base(opcode)
-        {
-        }
-
-        protected UniOperator(string opcode, IOperand operand)
-            : base(opcode, operand)
+        protected UniOperator(IOperand operand, IField field = null, uint? boost = null)
+            : base(new[] { operand }, field, boost)
         {
             if (operand == null)
                 throw new ArgumentNullException("operand");

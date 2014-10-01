@@ -1,21 +1,29 @@
-﻿namespace Comb
+﻿using System;
+
+namespace Comb
 {
     public class Sort
     {
-        public IField Field { get; private set; }
-        public SortDirection Direction { get; private set; }
+        readonly IField _field;
+        readonly SortDirection _direction;
 
         public Sort(IField field, SortDirection direction)
         {
-            Field = field;
-            Direction = direction;
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            _field = field;
+            _direction = direction;
         }
 
         public Sort(string fieldName, SortDirection direction)
+            : this(new Field(fieldName), direction)
         {
-            Field = new Field(fieldName);
-            Direction = direction;
         }
+
+        public IField Field { get { return _field; } }
+
+        public SortDirection Direction { get { return _direction; } }
 
         public override string ToString()
         {

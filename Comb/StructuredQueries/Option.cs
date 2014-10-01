@@ -2,14 +2,16 @@
 {
     public class Option
     {
+        readonly string _name, _value;
+
         public Option(string name, string value)
         {
-            Value = value;
-            Name = name;
+            _name = name;
+            _value = value;
         }
 
-        public string Name { get; private set; }
+        public string Name { get { return _name; } }
 
-        public string Value { get; private set; }
+        public string Value { get { return _value; } }
     }
 }

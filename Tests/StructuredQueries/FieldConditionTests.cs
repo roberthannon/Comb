@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Comb.Tests.StructuredQueries
 {
-    public class StringConditionTests
+    public class FieldConditionTests
     {
         [TestCase("%")]
         [TestCase("a1")]
@@ -16,9 +16,9 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new StringCondition(field, "blip");
+                new FieldCondition(field, "blip");
             },
-            Throws.ArgumentException.ForParameter("field"));
+            Throws.ArgumentException.ForParameter("name"));
         }
 
         [TestCase(null)]
@@ -27,7 +27,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new StringCondition("field", value);
+                new FieldCondition("field", value);
             },
             Throws.TypeOf<ArgumentNullException>().ForParameter("value"));
         }
@@ -37,7 +37,7 @@ namespace Comb.Tests.StructuredQueries
         [TestCase("\vvertical tab", "noop:'vertical tab'")]
         public void InvalidXmlCharactersAreStrippedFromValue(string value, string expected)
         {
-            var condition = new StringCondition("noop", value);
+            var condition = new FieldCondition("noop", value);
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo(expected));
@@ -46,20 +46,10 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void DefinitionIsFieldColonValueInQuotes()
         {
-            var condition = new StringCondition("a_1_b", "beep");
+            var condition = new FieldCondition("a_1_b", "beep");
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("a_1_b:'beep'"));
-        }
-
-        [TestCase(null)]
-        [TestCase("")]
-        public void MissingFieldNamesAreLeftOut(string field)
-        {
-            var condition = new StringCondition(field, "boop");
-            var definition = condition.Definition;
-
-            Assert.That(definition, Is.EqualTo("'boop'"));
         }
 
         [TestCase("/", "zurb:'/'")]
@@ -72,10 +62,19 @@ namespace Comb.Tests.StructuredQueries
         [TestCase("'\\\f/", "zurb:'\\'\\\\/'")]
         public void ValuesAreEncodedIfRequired(string value, string expected)
         {
-            var condition = new StringCondition("zurb", value);
+            var condition = new FieldCondition("zurb", value);
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void FieldIncludesRangeQuery()
+        {
+            var condition =  new FieldCondition("testfield", new RangeCondition(new IntValue(33), new IntValue(123), false, true));
+            var definition = condition.Definition;
+
+            Assert.That(definition, Is.EqualTo("testfield:{33,123]"));
         }
     }
 }

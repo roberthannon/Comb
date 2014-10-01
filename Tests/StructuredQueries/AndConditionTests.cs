@@ -38,7 +38,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIsAddedToOptions()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, field: "testfield");
+            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, "testfield");
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -58,7 +58,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIsAddedToDefinition()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, field: "testfield");
+            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, "testfield");
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(and field=testfield TEST)"));
@@ -67,7 +67,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToOptions()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, 984);
+            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 984);
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -87,7 +87,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToDefinition()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, 8);
+            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 8);
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(and boost=8 TEST)"));

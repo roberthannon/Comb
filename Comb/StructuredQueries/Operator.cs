@@ -6,28 +6,11 @@ namespace Comb.StructuredQueries
 {
     public abstract class Operator : IOperator
     {
-        protected Operator(string opcode)
-        {
-            if (opcode == null)
-                throw new ArgumentNullException("opcode");
+        readonly IField _field;
+        readonly uint? _boost;
+        readonly ICollection<IOperand> _operands;
 
-            Opcode = opcode;
-        }
-
-        protected Operator(string opcode, params IOperand[] operands)
-            : this(opcode)
-        {
-            if (operands == null)
-                throw new ArgumentNullException("operands");
-
-            if (operands.Length < 1)
-                throw new ArgumentOutOfRangeException("operands", "An Operator must have at least one operand.");
-
-            Operands = operands;
-        }
-
-        protected Operator(string opcode, ICollection<IOperand> operands)
-            : this(opcode)
+        protected Operator(ICollection<IOperand> operands, IField field = null, uint? boost = null)
         {
             if (operands == null)
                 throw new ArgumentNullException("operands");
@@ -35,44 +18,37 @@ namespace Comb.StructuredQueries
             if (!operands.Any())
                 throw new ArgumentOutOfRangeException("operands", "An Operator must have at least one operand.");
 
-            Operands = operands;
+            _operands = operands;
+            _field = field;
+            _boost = boost;
         }
 
-        public string Opcode { get; private set; }
+        public abstract string Opcode { get; }
 
-        public string Field { get; protected set; } // TODO change to IField instance?
+        public IField Field { get { return _field; } }
 
-        public uint? Boost { get; protected set; }
+        public uint? Boost { get { return _boost; } }
 
-        public IEnumerable<Option> Options
+        public virtual IEnumerable<Option> Options
         {
             get
             {
-                if (!string.IsNullOrEmpty(Field))
-                    yield return new Option("field", Field);
-
+                if (Field != null)
+                    yield return new Option("field", Field.Name);
                 if (Boost.HasValue)
                     yield return new Option("boost", Boost.ToString());
             }
         }
 
-        public IEnumerable<IOperand> Operands { get; protected set; }
+        public IEnumerable<IOperand> Operands { get { return _operands; } }
 
-        public string Definition
+        public virtual string Definition
         {
             get
             {
-                var parts = new List<string>
-                {
-                    Opcode
-                };
-
-                foreach (var option in Options)
-                    parts.Add(string.Format("{0}={1}", option.Name, option.Value));
-
-                foreach (var operand in Operands)
-                    parts.Add(operand.Definition);
-
+                var parts = new List<string> { Opcode };
+                parts.AddRange(Options.Select(o => string.Format("{0}={1}", o.Name, o.Value)));
+                parts.AddRange(Operands.Select(o => o.Definition));
                 return string.Format("({0})", string.Join(" ", parts));
             }
         }

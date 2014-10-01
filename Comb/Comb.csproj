@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmptyResult.cs" />
+    <Compile Include="Field\BuiltInField.cs" />
     <Compile Include="Field\IField.cs" />
     <Compile Include="Field\Expression\IExpression.cs" />
     <Compile Include="Return\Return.cs" />
@@ -71,16 +72,26 @@
     <Compile Include="Query.cs" />
     <Compile Include="SearchRequest.cs" />
     <Compile Include="SimpleQuery.cs" />
-    <Compile Include="StructuredQueries\AndCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\AndCondition.cs" />
+    <Compile Include="StructuredQueries\Values\DateValue.cs" />
+    <Compile Include="StructuredQueries\Values\DoubleValue.cs" />
     <Compile Include="StructuredQueries\IOperand.cs" />
     <Compile Include="StructuredQueries\IOperator.cs" />
-    <Compile Include="StructuredQueries\NotCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\MatchAllCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\PrefixCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\RangeCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\FieldCondition.cs" />
+    <Compile Include="StructuredQueries\Values\IntValue.cs" />
+    <Compile Include="StructuredQueries\UniOperator.cs" />
+    <Compile Include="StructuredQueries\Conditions\NotCondition.cs" />
     <Compile Include="StructuredQueries\Operator.cs" />
     <Compile Include="StructuredQueries\Option.cs" />
-    <Compile Include="StructuredQueries\OrCondition.cs" />
-    <Compile Include="StructuredQueries\StringCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\NearCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\TermCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\PhraseCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\OrCondition.cs" />
+    <Compile Include="StructuredQueries\Values\StringValue.cs" />
     <Compile Include="StructuredQueries\StructuredQuery.cs" />
-    <Compile Include="StructuredQueries\UniOperator.cs" />
     <Compile Include="Hit.cs" />
     <Compile Include="Hits.cs" />
     <Compile Include="ICloudSearchClient.cs" />

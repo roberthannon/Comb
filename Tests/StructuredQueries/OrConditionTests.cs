@@ -30,7 +30,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new OrCondition(new Collection<IOperand>());
+                new OrCondition(new IOperand[0]);
             },
             Throws.TypeOf<ArgumentOutOfRangeException>().ForParameter("operands"));
         }
@@ -38,7 +38,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToOptions()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, 984);
+            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 984);
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -87,7 +87,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToDefinition()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, 8);
+            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 8);
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(or boost=8 TEST)"));

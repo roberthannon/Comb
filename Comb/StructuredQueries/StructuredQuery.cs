@@ -6,12 +6,14 @@
     /// </summary>
     public class StructuredQuery : Query
     {
+        readonly IOperand _root;
+
         public StructuredQuery(IOperand root)
         {
-            Root = root;
+            _root = root;
         }
 
-        public IOperand Root { get; private set; }
+        public IOperand Root { get { return _root; } }
 
         public override string Parser
         {
