@@ -1,5 +1,7 @@
 ﻿using Comb.StructuredQueries;
+using Comb.Tests.Support;
 using NUnit.Framework;
+using System;
 
 namespace Comb.Tests.StructuredQueries
 {
@@ -9,6 +11,16 @@ namespace Comb.Tests.StructuredQueries
         public void SetUp()
         {
             
+        }
+
+        [Test]
+        public void NullFieldThrowsException()
+        {
+            Assert.That(() =>
+            {
+                new TermCondition(new IntValue(123), null);
+            },
+            Throws.TypeOf<ArgumentNullException>().ForParameter("field"));
         }
 
         [Test]

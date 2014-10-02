@@ -6,9 +6,10 @@ namespace Comb.StructuredQueries
 {
     public abstract class Operator : IOperator
     {
+        readonly ICollection<IOperand> _operands;
+        protected readonly ICollection<Option> _options;
         readonly IField _field;
         readonly uint? _boost;
-        readonly ICollection<IOperand> _operands;
 
         protected Operator(ICollection<IOperand> operands, IField field = null, uint? boost = null)
         {
@@ -21,6 +22,10 @@ namespace Comb.StructuredQueries
             _operands = operands;
             _field = field;
             _boost = boost;
+
+            _options = new List<Option>();
+            if (Field != null) _options.Add(new Option("field", Field.Name));
+            if (Boost.HasValue) _options.Add(new Option("boost", Boost.ToString()));
         }
 
         public abstract string Opcode { get; }
@@ -29,18 +34,9 @@ namespace Comb.StructuredQueries
 
         public uint? Boost { get { return _boost; } }
 
-        public virtual IEnumerable<Option> Options
-        {
-            get
-            {
-                if (Field != null)
-                    yield return new Option("field", Field.Name);
-                if (Boost.HasValue)
-                    yield return new Option("boost", Boost.ToString());
-            }
-        }
+        public ICollection<Option> Options { get { return _options; } }
 
-        public IEnumerable<IOperand> Operands { get { return _operands; } }
+        public ICollection<IOperand> Operands { get { return _operands; } }
 
         public virtual string Definition
         {

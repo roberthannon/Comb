@@ -7,8 +7,8 @@ namespace Comb.StructuredQueries
         {
         }
 
-        public PhraseCondition(string operand, string field, uint? boost = null)
-            : this(new StringValue(operand), new Field(field), boost)
+        public PhraseCondition(string operand, string field = null, uint? boost = null)
+            : this(new StringValue(operand), field != null ? new Field(field) : null, boost)
         {
         }
 

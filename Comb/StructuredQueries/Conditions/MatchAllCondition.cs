@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Comb.StructuredQueries
 {
@@ -9,8 +8,8 @@ namespace Comb.StructuredQueries
 
         public string Opcode { get { return "matchall"; } }
 
-        public IEnumerable<Option> Options { get { return Enumerable.Empty<Option>(); } }
+        public ICollection<Option> Options { get { return new Option[0]; } }
 
-        public IEnumerable<IOperand> Operands { get { return Enumerable.Empty<IOperand>(); } }
+        public ICollection<IOperand> Operands { get { return new IOperand[0]; } }
     }
 }

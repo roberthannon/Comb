@@ -18,11 +18,16 @@ namespace Comb.StructuredQueries
         {
         }
 
-        public OrCondition(params IOperand[] operands)
-            : this(operands, (IField)null)
-        {
-        }
-
         public override string Opcode { get { return "or"; } }
+
+        public override string Definition
+        {
+            get
+            {
+                return Operands.Count == 1 && !Options.Any() ? // If and condition has one operand and no options, it is a no-op
+                    Operands.Single().Definition : // Return the definition of the only operand
+                    base.Definition;
+            }
+        }
     }
 }

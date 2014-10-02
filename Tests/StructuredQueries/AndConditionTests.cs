@@ -94,12 +94,21 @@ namespace Comb.Tests.StructuredQueries
         }
 
         [Test]
-        public void OneTermIsWrapped()
+        public void OneTermIsNotWrapped()
         {
             var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") });
             var definition = condition.Definition;
 
-            Assert.That(definition, Is.EqualTo("(and TEST)"));
+            Assert.That(definition, Is.EqualTo("TEST"));
+        }
+
+        [Test]
+        public void OneTermWithOptionIsWrapped()
+        {
+            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, "somefield");
+            var definition = condition.Definition;
+
+            Assert.That(definition, Is.EqualTo("(and field=somefield TEST)"));
         }
 
         [Test]

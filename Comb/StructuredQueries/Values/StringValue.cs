@@ -39,8 +39,8 @@ namespace Comb.StructuredQueries
              * so you can remove them: /[^\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]/ .
              * */
             value = Regex.Replace(value, "[^\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]", "");
-            value = value.Replace("\\", "\\\\");
-            value = value.Replace("'", "\\'");
+            value = value.Replace(@"\", @"\\");
+            value = value.Replace("'", @"\'");
 
             return value;
         }

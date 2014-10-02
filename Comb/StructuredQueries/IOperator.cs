@@ -6,8 +6,8 @@ namespace Comb.StructuredQueries
     {
         string Opcode { get; }
 
-        IEnumerable<Option> Options { get; }
+        ICollection<Option> Options { get; }
 
-        IEnumerable<IOperand> Operands { get; }
+        ICollection<IOperand> Operands { get; }
     }
 }

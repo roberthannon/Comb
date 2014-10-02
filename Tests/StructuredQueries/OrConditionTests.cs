@@ -94,12 +94,21 @@ namespace Comb.Tests.StructuredQueries
         }
 
         [Test]
-        public void OneTermIsWrapped()
+        public void OneTermIsNotWrapped()
         {
             var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") });
             var definition = condition.Definition;
 
-            Assert.That(definition, Is.EqualTo("(or TEST)"));
+            Assert.That(definition, Is.EqualTo("TEST"));
+        }
+
+        [Test]
+        public void OneTermWithOptionIsWrapped()
+        {
+            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 3);
+            var definition = condition.Definition;
+
+            Assert.That(definition, Is.EqualTo("(or boost=3 TEST)"));
         }
 
         [Test]

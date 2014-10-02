@@ -7,8 +7,8 @@ namespace Comb.StructuredQueries
         {
         }
 
-        public PrefixCondition(string operand, string field, uint? boost = null)
-            : this(new StringValue(operand), new Field(field), boost)
+        public PrefixCondition(string operand, string field = null, uint? boost = null)
+            : this(new StringValue(operand), field != null ? new Field(field) : null, boost)
         {
         }
 

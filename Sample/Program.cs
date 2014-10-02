@@ -20,7 +20,8 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
                 //Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new AndCondition(
+                Query = new StructuredQuery(new AndCondition(new IOperand[]
+                {
                     new FieldCondition("test", "boop"),
                     new StringValue("beep")
                     //new AndCondition(new[]
@@ -28,7 +29,7 @@ namespace Comb.Sample
                     //    new StringCondition("Beep"), 
                     //    new StringCondition("Bing")
                     //})
-                )),
+                })),
                 //Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
                 Start = 0,
                 Size = 20,

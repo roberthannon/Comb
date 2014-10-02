@@ -4,7 +4,7 @@ namespace Comb.StructuredQueries
 {
     public class FieldCondition : UniOperator
     {
-        private FieldCondition(IField field, IOperand operand)
+        FieldCondition(IField field, IOperand operand)
             : base(operand, field)
         {
             if (field == null)
@@ -31,7 +31,7 @@ namespace Comb.StructuredQueries
         {
         }
 
-        public FieldCondition(IField field, RangeCondition operand)
+        public FieldCondition(IField field, RangeValue operand)
             : this(field, (IOperand)operand)
         {
         }
@@ -56,7 +56,7 @@ namespace Comb.StructuredQueries
         {
         }
 
-        public FieldCondition(string field, RangeCondition operand)
+        public FieldCondition(string field, RangeValue operand)
             : this(new Field(field), (IOperand)operand)
         {
         }

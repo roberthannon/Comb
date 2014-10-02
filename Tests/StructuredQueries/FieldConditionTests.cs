@@ -71,7 +71,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIncludesRangeQuery()
         {
-            var condition =  new FieldCondition("testfield", new RangeCondition(new IntValue(33), new IntValue(123), false, true));
+            var condition =  new FieldCondition("testfield", new RangeValue(33, 123, false, true));
             var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("testfield:{33,123]"));

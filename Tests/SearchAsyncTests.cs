@@ -117,7 +117,7 @@ namespace Comb.Tests
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
-                Filter = new StructuredQuery(new AndCondition(new FieldCondition("somefield", "thingy 1"), new StringValue("thingy 2")))
+                Filter = new StructuredQuery(new AndCondition(new IOperand[] { new FieldCondition("somefield", "thingy 1"), new StringValue("thingy 2") }))
             });
 
             Assert.That(response.Request.Filter, Is.EqualTo("(and somefield:'thingy 1' 'thingy 2')"));

@@ -73,13 +73,14 @@
     <Compile Include="SearchRequest.cs" />
     <Compile Include="SimpleQuery.cs" />
     <Compile Include="StructuredQueries\Conditions\AndCondition.cs" />
+    <Compile Include="StructuredQueries\Conditions\RangeCondition.cs" />
     <Compile Include="StructuredQueries\Values\DateValue.cs" />
     <Compile Include="StructuredQueries\Values\DoubleValue.cs" />
     <Compile Include="StructuredQueries\IOperand.cs" />
     <Compile Include="StructuredQueries\IOperator.cs" />
     <Compile Include="StructuredQueries\Conditions\MatchAllCondition.cs" />
     <Compile Include="StructuredQueries\Conditions\PrefixCondition.cs" />
-    <Compile Include="StructuredQueries\Conditions\RangeCondition.cs" />
+    <Compile Include="StructuredQueries\Values\RangeValue.cs" />
     <Compile Include="StructuredQueries\Conditions\FieldCondition.cs" />
     <Compile Include="StructuredQueries\Values\IntValue.cs" />
     <Compile Include="StructuredQueries\UniOperator.cs" />

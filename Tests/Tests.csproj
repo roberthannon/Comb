@@ -64,6 +64,7 @@
     <Compile Include="StructuredQueries\MatchAllConditionTests.cs" />
     <Compile Include="StructuredQueries\PrefixConditionTests.cs" />
     <Compile Include="StructuredQueries\RangeConditionTests.cs" />
+    <Compile Include="StructuredQueries\RangeValueTests.cs" />
     <Compile Include="StructuredQueries\TermConditionTests.cs" />
     <Compile Include="StructuredQueries\PhraseConditionTests.cs" />
     <Compile Include="StructuredQueries\NearConditionTests.cs" />
