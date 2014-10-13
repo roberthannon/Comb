@@ -1,5 +1,4 @@
-﻿using Comb.StructuredQueries;
-using Comb.Tests.Support;
+﻿using Comb.Tests.Support;
 using NUnit.Framework;
 using System;
 
@@ -18,7 +17,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new RangeCondition(new RangeValue(2,3), (IField)null);
+                new RangeCondition(new Range(2,3), (IField)null);
             },
             Throws.TypeOf<ArgumentNullException>().ForParameter("field"));
         }
@@ -26,8 +25,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void CorrectParamsAreIncluded()
         {
-            var condition = new RangeCondition(new RangeValue(3, 7, minInclusive: true), "testfield");
-            var definition = condition.Definition;
+            var condition = new RangeCondition(new Range(3, 7, minInclusive: true), "testfield");
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(range field=testfield [3,7})"));
         }
@@ -35,8 +34,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void CorrectDateParamsAreIncluded()
         {
-            var condition = new RangeCondition(new RangeValue(new DateTime(2013, 06, 05, 12, 22, 55, 112), new DateTime(2014, 07, 06, 13, 23, 56, 227)), "testfield");
-            var definition = condition.Definition;
+            var condition = new RangeCondition(new Range(new DateTime(2013, 06, 05, 12, 22, 55, 112), new DateTime(2014, 07, 06, 13, 23, 56, 227)), "testfield");
+            var definition = condition.QueryDefinition;
 
             Assert.AreEqual(definition, "(range field=testfield {'2013-06-05T12:22:55.112Z','2014-07-06T13:23:56.227Z'})");
         }

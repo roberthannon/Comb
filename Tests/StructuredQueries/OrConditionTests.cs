@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
 
@@ -79,7 +78,7 @@ namespace Comb.Tests.StructuredQueries
         public void FieldIsAddedToDefinition()
         {
             var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, field: "testfield");
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(or field=testfield TEST)"));
         }
@@ -88,7 +87,7 @@ namespace Comb.Tests.StructuredQueries
         public void BoostIsAddedToDefinition()
         {
             var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 8);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(or boost=8 TEST)"));
         }
@@ -97,7 +96,7 @@ namespace Comb.Tests.StructuredQueries
         public void OneTermIsNotWrapped()
         {
             var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") });
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("TEST"));
         }
@@ -106,7 +105,7 @@ namespace Comb.Tests.StructuredQueries
         public void OneTermWithOptionIsWrapped()
         {
             var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 3);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(or boost=3 TEST)"));
         }
@@ -120,7 +119,7 @@ namespace Comb.Tests.StructuredQueries
                 new TestCondition("(its (a) (test))"),
                 new TestCondition("ZUBB")
             });
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(or (omg) (its (a) (test)) ZUBB)"));
         }

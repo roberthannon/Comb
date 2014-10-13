@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
 
@@ -51,7 +50,7 @@ namespace Comb.Tests.StructuredQueries
         public void BoostIsAddedToDefinition()
         {
             var condition = new NotCondition(new TestCondition("TEST"), 3);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(not boost=3 TEST)"));
         }
@@ -60,7 +59,7 @@ namespace Comb.Tests.StructuredQueries
         public void TermIsWrapped()
         {
             var condition = new NotCondition(new TestCondition("TEST"));
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(not TEST)"));
         }

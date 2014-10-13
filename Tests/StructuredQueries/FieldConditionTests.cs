@@ -1,5 +1,4 @@
 ﻿using System;
-using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
 
@@ -38,7 +37,7 @@ namespace Comb.Tests.StructuredQueries
         public void InvalidXmlCharactersAreStrippedFromValue(string value, string expected)
         {
             var condition = new FieldCondition("noop", value);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo(expected));
         }
@@ -47,7 +46,7 @@ namespace Comb.Tests.StructuredQueries
         public void DefinitionIsFieldColonValueInQuotes()
         {
             var condition = new FieldCondition("a_1_b", "beep");
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("a_1_b:'beep'"));
         }
@@ -63,7 +62,7 @@ namespace Comb.Tests.StructuredQueries
         public void ValuesAreEncodedIfRequired(string value, string expected)
         {
             var condition = new FieldCondition("zurb", value);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo(expected));
         }
@@ -71,8 +70,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIncludesRangeQuery()
         {
-            var condition =  new FieldCondition("testfield", new RangeValue(33, 123, false, true));
-            var definition = condition.Definition;
+            var condition =  new FieldCondition("testfield", new Range(33, 123, false, true));
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("testfield:{33,123]"));
         }

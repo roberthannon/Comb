@@ -1,5 +1,4 @@
-﻿using Comb.StructuredQueries;
-using Comb.Tests.Support;
+﻿using Comb.Tests.Support;
 using NUnit.Framework;
 using System.Collections.Generic;
 
@@ -59,6 +58,32 @@ namespace Comb.Tests
 
             Assert.That(response.Request.Size,  Is.EqualTo("123"));
             Assert.That(response.Request.Start, Is.EqualTo("456"));
+        }
+
+        [Test]
+        public async void InfoIncludesFacets()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("boop"),
+                Facets = new Facet[]
+                {
+                    new BucketFacet("colour", new[]
+                    {
+                        new Bucket("red"), new Bucket("green"), new Bucket("blue")
+                    }),
+                    new BucketFacet("century", new[]
+                    {
+                        new Bucket(new Range(1600,1700,true,false)), new Bucket(new Range(1700,1800,true,false)), new Bucket(new Range(1800,2000,true,false))
+                    }, FacetMethodType.Interval)
+                }
+            });
+
+            Assert.AreEqual(response.Request.Facets.Length, 2);
+            Assert.AreEqual(response.Request.Facets[0].Key, "facet.colour");
+            Assert.AreEqual(response.Request.Facets[0].Value, "{buckets:[\"red\",\"green\",\"blue\"],method:\"filter\"}");
+            Assert.AreEqual(response.Request.Facets[1].Key, "facet.century");
+            Assert.AreEqual(response.Request.Facets[1].Value, "{buckets:[\"[1600,1700}\",\"[1700,1800}\",\"[1800,2000}\"],method:\"interval\"}");
         }
 
         [Test]

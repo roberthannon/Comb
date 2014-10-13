@@ -1,5 +1,4 @@
-﻿using Comb.StructuredQueries;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Comb.Tests.StructuredQueries
 {
@@ -15,7 +14,7 @@ namespace Comb.Tests.StructuredQueries
         public void CorrectParamsAreIncluded()
         {
             var condition = new MatchAllCondition();
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("matchall"));
         }

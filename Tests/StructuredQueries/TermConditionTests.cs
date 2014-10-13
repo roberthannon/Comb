@@ -1,5 +1,4 @@
-﻿using Comb.StructuredQueries;
-using Comb.Tests.Support;
+﻿using Comb.Tests.Support;
 using NUnit.Framework;
 using System;
 
@@ -27,7 +26,7 @@ namespace Comb.Tests.StructuredQueries
         public void CorrectParamsAreIncluded()
         {
             var condition = new TermCondition("some test text", "testfield", 2);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(term field=testfield boost=2 'some test text')"));
         }
@@ -36,7 +35,7 @@ namespace Comb.Tests.StructuredQueries
         public void CorrectParamsAreIncludedForIntValue()
         {
             var condition = new TermCondition(27, "blahblah", 2);
-            var definition = condition.Definition;
+            var definition = condition.QueryDefinition;
 
             Assert.That(definition, Is.EqualTo("(term field=blahblah boost=2 27)"));
         }

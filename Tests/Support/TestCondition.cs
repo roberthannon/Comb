@@ -1,15 +1,14 @@
-﻿using Comb.StructuredQueries;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Comb.Tests.Support
 {
     class TestCondition : IOperator
     {
-        public string Definition { get; private set; }
+        public string QueryDefinition { get; private set; }
 
         public TestCondition(string definition)
         {
-            Definition = definition;
+            QueryDefinition = definition;
         }
 
         public string Opcode

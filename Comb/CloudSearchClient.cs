@@ -79,16 +79,21 @@ namespace Comb
             if (request.Return.Any())
                 queryString["return"] = info.Return = string.Join(",", request.Return);
 
-            if (request.Expressions.Any())
+            info.Facets = request.Facets.Select(facet =>
             {
-                info.Expressions = request.Expressions.Select((expression, i) =>
-                {
-                    var queryParamName = string.Format("expr.{0}", expression.Name);
-                    var queryParamValue = expression.Definition;
-                    queryString[queryParamName] = queryParamValue;
-                    return new KeyValuePair<string, string>(queryParamName, queryParamValue);
-                }).ToArray();
-            }
+                var queryParamName = string.Format("facet.{0}", facet.Field.Name);
+                var queryParamValue = facet.Definition;
+                queryString[queryParamName] = queryParamValue;
+                return new KeyValuePair<string, string>(queryParamName, queryParamValue);
+            }).ToArray();
+
+            info.Expressions = request.Expressions.Select(expression =>
+            {
+                var queryParamName = string.Format("expr.{0}", expression.Name);
+                var queryParamValue = expression.Definition;
+                queryString[queryParamName] = queryParamValue;
+                return new KeyValuePair<string, string>(queryParamName, queryParamValue);
+            }).ToArray();
 
             return RunSearch<T>(_searchClient, "search", queryString, info);
         }

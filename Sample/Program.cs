@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Comb.StructuredQueries;
 using Newtonsoft.Json;
 
 namespace Comb.Sample
@@ -8,9 +7,6 @@ namespace Comb.Sample
     class Program
     {
         const string SearchEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
-
-        public static readonly Field Silly = new Field("silly");
-        public static readonly Field Test = new Field("test");
 
         static void Main()
         {
@@ -35,7 +31,7 @@ namespace Comb.Sample
                 Size = 20,
                 Sort = new List<Sort>
                 {
-                    new Sort(Silly, SortDirection.Descending)
+                    new Sort("literal", SortDirection.Descending)
                 },
                 Return = new List<Return>
                 {
