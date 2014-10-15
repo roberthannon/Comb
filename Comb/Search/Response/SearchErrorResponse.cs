@@ -1,6 +1,6 @@
 namespace Comb
 {
-    public class ErrorResponse
+    public class SearchErrorResponse
     {
         public string Message { get; set; }
     }

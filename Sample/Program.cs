@@ -6,9 +6,15 @@ namespace Comb.Sample
 {
     class Program
     {
-        const string SearchEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
+        const string SampleEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
 
         static void Main()
+        {
+            Search();
+            Update();
+        }
+
+        static void Search()
         {
             // TODO: Restriction of returned fields - probably based on result class requested.
             // TODO: Custom sorting expressions.
@@ -42,12 +48,12 @@ namespace Comb.Sample
 
             var client = new CloudSearchClient(new CloudSearchSettings
             {
-                Endpoint = SearchEndpoint
+                Endpoint = SampleEndpoint
             });
 
             try
             {
-                var results = client.SearchAsync<Result>(query).Result;
+                var results = client.SearchAsync<SearchResult>(query).Result;
 
                 Console.WriteLine("URL:      " + results.Request.Url);
                 Console.WriteLine("Resource: " + results.Status.ResourceId);
@@ -76,7 +82,52 @@ namespace Comb.Sample
 
                     if (cloudSearchException != null)
                     {
-                        Console.WriteLine("Status: ({0}) {1}", (int) cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
+                        Console.WriteLine("Status: ({0}) {1}", (int)cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
+                        Console.WriteLine("Error:  " + inner.Message);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: " + inner.Message);
+                    }
+                }
+            }
+        }
+
+        static void Update()
+        {
+            var client = new CloudSearchClient(new CloudSearchSettings
+            {
+                Endpoint = SampleEndpoint
+            });
+
+            try
+            {
+                var documentRequests = new[]
+                {
+                    new Add("54321", new IndexDoc{ Test = "bacon and cheese", Literal = "blue" }),
+                    new Add("12345", new IndexDoc{ Test = "things and apples", Literal = "whyohwhy" }),
+                    new Add("12333", new IndexDoc{ Test = "the thing that should not be", Literal = "yellow" })
+                };
+
+                var results = client.UpdateAsync(documentRequests).Result;
+
+                Console.WriteLine("Status:      " + results.Status);
+                Console.WriteLine("Adds: " + results.Adds);
+                Console.WriteLine("Deletes:     " + results.Deletes);
+                Console.WriteLine("Message:    " + results.Message);
+                Console.WriteLine();
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var inner in ex.InnerExceptions)
+                {
+                    Console.WriteLine(inner.GetType().Name);
+
+                    var cloudSearchException = inner as UpdateException;
+
+                    if (cloudSearchException != null)
+                    {
+                        Console.WriteLine("Status: ({0}) {1}", (int)cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
                         Console.WriteLine("Error:  " + inner.Message);
                     }
                     else
@@ -88,7 +139,7 @@ namespace Comb.Sample
         }
     }
 
-    public class Result
+    public class SearchResult
     {
         public string Test { get; set; }
         
@@ -96,5 +147,20 @@ namespace Comb.Sample
 
         [JsonProperty(Constants.Fields.Score)]
         public float Score { get; set; }
+    }
+
+    public class IndexDoc
+    {
+        public string Literal { get; set; }
+
+        public string Test { get; set; }
+
+        [JsonProperty("literal_array")]
+        public HashSet<string> LiteralArray { get; set; }
+
+        public IndexDoc()
+        {
+            LiteralArray = new HashSet<string>();
+        }
     }
 }
