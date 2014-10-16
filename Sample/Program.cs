@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Comb.Sample
@@ -104,7 +105,7 @@ namespace Comb.Sample
             {
                 var documentRequests = new[]
                 {
-                    new Add("54321", new IndexDoc{ Test = "bacon and cheese", Literal = "blue" }),
+                    new Add("54321", new IndexDoc{ Test = "bacon and cheese", Literal = "blue", LiteralArray = new[] { "cheese", "colours" }}),
                     new Add("12345", new IndexDoc{ Test = "things and apples", Literal = "whyohwhy" }),
                     new Add("12333", new IndexDoc{ Test = "the thing that should not be", Literal = "yellow" })
                 };
@@ -156,11 +157,11 @@ namespace Comb.Sample
         public string Test { get; set; }
 
         [JsonProperty("literal_array")]
-        public HashSet<string> LiteralArray { get; set; }
+        public IEnumerable<string> LiteralArray { get; set; }
 
         public IndexDoc()
         {
-            LiteralArray = new HashSet<string>();
+            LiteralArray = Enumerable.Empty<string>();
         }
     }
 }

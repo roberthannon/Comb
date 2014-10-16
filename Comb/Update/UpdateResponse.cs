@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Comb
+﻿namespace Comb
 {
     public class UpdateResponse
     {
-        public string Status { get; set; }
+        public string Status { get; set; } // TODO make enum?
 
         public int Adds { get; set; }
 
@@ -12,10 +10,8 @@ namespace Comb
 
         public string Message { get; set; }
 
-        [Obsolete("Deprecated by AWS")]
         public UpdateResponseMessage[] Errors { get; set; }
 
-        [Obsolete("Deprecated by AWS")]
         public UpdateResponseMessage[] Warnings { get; set; }
 
         public class UpdateResponseMessage
