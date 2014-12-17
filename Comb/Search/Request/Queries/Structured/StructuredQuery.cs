@@ -22,7 +22,7 @@
 
         public override string Definition
         {
-            get { return Root.Definition; }
+            get { return _root.Definition; }
         }
     }
 }

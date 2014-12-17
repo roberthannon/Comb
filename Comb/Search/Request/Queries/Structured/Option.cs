@@ -24,7 +24,7 @@ namespace Comb
 
         public string Definition
         {
-            get { return string.Format("{0}={1}", Name, Value); }
+            get { return string.Format("{0}={1}", _name, _value); }
         }
     }
 }

@@ -4,7 +4,8 @@ namespace Comb
 {
     public class Return
     {
-        public static readonly Return AllFields = new Return(ReturnFields.All);
+        public static readonly Return AllFields = new Return(ReturnFields.AllFields);
+        public static readonly Return NoFields = new Return(ReturnFields.NoFields);
         public static readonly Return Score = new Return(ReturnFields.Score);
 
         readonly IField _field;
@@ -26,7 +27,7 @@ namespace Comb
 
         public override string ToString()
         {
-            return Field.Name;
+            return _field.Name;
         }
     }
 }

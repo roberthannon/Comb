@@ -27,7 +27,7 @@ namespace Comb
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", Field.Name, Direction == SortDirection.Ascending ? "asc" : "desc");
+            return string.Format("{0} {1}", _field.Name, _direction == SortDirection.Ascending ? "asc" : "desc");
         }
     }
 }

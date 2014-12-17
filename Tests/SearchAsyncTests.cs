@@ -68,6 +68,9 @@ namespace Comb.Tests
                 Query = new SimpleQuery("boop"),
                 Facets = new Facet[]
                 {
+                    new Facet("status"),
+                    new SortFacet("genre", FacetSortType.Bucket, 6),
+                    new SortFacet("metadata", FacetSortType.Count, 53),
                     new BucketFacet("colour", new[]
                     {
                         new Bucket("red"), new Bucket("green"), new Bucket("blue")
@@ -79,30 +82,37 @@ namespace Comb.Tests
                 }
             });
 
-            Assert.AreEqual(response.Request.Facets.Length, 2);
-            Assert.AreEqual(response.Request.Facets[0].Key, "facet.colour");
-            Assert.AreEqual(response.Request.Facets[0].Value, "{buckets:[\"red\",\"green\",\"blue\"],method:\"filter\"}");
-            Assert.AreEqual(response.Request.Facets[1].Key, "facet.century");
-            Assert.AreEqual(response.Request.Facets[1].Value, "{buckets:[\"[1600,1700}\",\"[1700,1800}\",\"[1800,2000}\"],method:\"interval\"}");
+            Assert.AreEqual(response.Request.Facets.Length, 5);
+            Assert.AreEqual(response.Request.Facets[0].Key, "facet.status");
+            Assert.AreEqual(response.Request.Facets[0].Value, "{}");
+            Assert.AreEqual(response.Request.Facets[1].Key, "facet.genre");
+            Assert.AreEqual(response.Request.Facets[1].Value, "{sort:'bucket',size:6}");
+            Assert.AreEqual(response.Request.Facets[2].Key, "facet.metadata");
+            Assert.AreEqual(response.Request.Facets[2].Value, "{sort:'count',size:53}"); 
+            Assert.AreEqual(response.Request.Facets[3].Key, "facet.colour");
+            Assert.AreEqual(response.Request.Facets[3].Value, "{buckets:[\"red\",\"green\",\"blue\"],method:\"filter\"}");
+            Assert.AreEqual(response.Request.Facets[4].Key, "facet.century");
+            Assert.AreEqual(response.Request.Facets[4].Value, "{buckets:[\"[1600,1700}\",\"[1700,1800}\",\"[1800,2000}\"],method:\"interval\"}");
         }
 
         [Test]
         public async void InfoIncludesSortExpression()
         {
-            var expression = new Expression("one", "two*three+four");
+            var expression = new Expression("mysort", "two*three+four");
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
                 Sort = new List<Sort>
                 {
+                    new Sort("createddate", SortDirection.Ascending),
                     new Sort(expression, SortDirection.Descending),
                     new Sort(SortFields.Id, SortDirection.Ascending)
                 }
             });
 
-            Assert.That(response.Request.Sort, Is.EqualTo("one desc,_id asc"));
-            Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.one", "two*three+four")));
-            Assert.That(response.Request.Url, Contains.Substring("expr.one=two*three%2bfour"));
+            Assert.That(response.Request.Sort, Is.EqualTo("createddate asc,mysort desc,_id asc"));
+            Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.mysort", "two*three+four")));
+            Assert.That(response.Request.Url, Contains.Substring("expr.mysort=two*three%2bfour"));
         }
 
         [Test]

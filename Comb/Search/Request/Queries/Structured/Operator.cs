@@ -44,8 +44,8 @@ namespace Comb
             get
             {
                 var components = new List<string> { Opcode };
-                components.AddRange(Options.Select(o => o.Definition));
-                components.AddRange(Operands.Select(o => o.Definition));
+                components.AddRange(_options.Select(o => o.Definition));
+                components.AddRange(_operands.Select(o => o.Definition));
                 return string.Format("({0})", string.Join(" ", components));
             }
         }

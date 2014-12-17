@@ -2,11 +2,11 @@ using System;
 
 namespace Comb
 {
-    public abstract class Facet
+    public class Facet
     {
         readonly IField _field;
 
-        protected Facet(IField field)
+        public Facet(IField field)
         {
             if (field == null)
                 throw new ArgumentNullException("field");
@@ -14,7 +14,7 @@ namespace Comb
             _field = field;
         }
 
-        protected Facet(string field)
+        public Facet(string field)
             : this(new Field(field))
         {
         }
@@ -24,6 +24,9 @@ namespace Comb
         /// </summary>
         public IField Field { get { return _field; } }
 
-        public abstract string Definition { get; }
+        /// <summary>
+        /// According to the specs, should be equivalent to SortFacet when using the default options.
+        /// </summary>
+        public virtual string Definition { get { return "{}"; } }
     }
 }

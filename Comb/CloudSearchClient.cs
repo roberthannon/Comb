@@ -72,7 +72,7 @@ namespace Comb
                 queryString["size"] = info.Size = request.Size.ToString();
 
             if (request.Sort.Any())
-                queryString["sort"] = info.Sort = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
+                queryString["sort"] = info.Sort = string.Join(",", request.Sort);
 
             if (request.Return.Any())
                 queryString["return"] = info.Return = string.Join(",", request.Return);

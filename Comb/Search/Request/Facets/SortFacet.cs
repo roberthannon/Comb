@@ -23,7 +23,7 @@
 
         public override string Definition
         {
-            get { return string.Format("{{sort:'{0}',size:{1}}}", Sort.ToString().ToLower(), Size); }
+            get { return string.Format("{{sort:'{0}',size:{1}}}", _sort.ToString().ToLower(), _size); }
         }
     }
 }
