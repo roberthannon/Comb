@@ -15,7 +15,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new FieldCondition(field, "blip");
+                new FieldCondition("blip", field);
             },
             Throws.ArgumentException.ForParameter("name"));
         }
@@ -26,7 +26,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new FieldCondition("field", value);
+                new FieldCondition(value, "field");
             },
             Throws.TypeOf<ArgumentNullException>().ForParameter("value"));
         }
@@ -36,8 +36,8 @@ namespace Comb.Tests.StructuredQueries
         [TestCase("\vvertical tab", "noop:'vertical tab'")]
         public void InvalidXmlCharactersAreStrippedFromValue(string value, string expected)
         {
-            var condition = new FieldCondition("noop", value);
-            var definition = condition.QueryDefinition;
+            var condition = new FieldCondition(value, "noop");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo(expected));
         }
@@ -45,8 +45,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void DefinitionIsFieldColonValueInQuotes()
         {
-            var condition = new FieldCondition("a_1_b", "beep");
-            var definition = condition.QueryDefinition;
+            var condition = new FieldCondition("beep", "a_1_b");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("a_1_b:'beep'"));
         }
@@ -61,8 +61,8 @@ namespace Comb.Tests.StructuredQueries
         [TestCase("'\\\f/", "zurb:'\\'\\\\/'")]
         public void ValuesAreEncodedIfRequired(string value, string expected)
         {
-            var condition = new FieldCondition("zurb", value);
-            var definition = condition.QueryDefinition;
+            var condition = new FieldCondition(value, "zurb");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo(expected));
         }
@@ -70,8 +70,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIncludesRangeQuery()
         {
-            var condition =  new FieldCondition("testfield", new Range(33, 123, false, true));
-            var definition = condition.QueryDefinition;
+            var condition = new FieldCondition(new Range(33, 123, false, true), "testfield");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("testfield:{33,123]"));
         }

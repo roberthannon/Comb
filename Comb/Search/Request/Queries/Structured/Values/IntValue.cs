@@ -1,6 +1,8 @@
-﻿namespace Comb
+﻿using System.Globalization;
+
+namespace Comb
 {
-    public class IntValue : IValue
+    public class IntValue : IOperand
     {
         readonly int _value;
 
@@ -11,14 +13,14 @@
 
         public int Value { get { return _value; } }
 
-        public string QueryDefinition
+        public string Definition
         {
             get { return ToString(); }
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return _value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

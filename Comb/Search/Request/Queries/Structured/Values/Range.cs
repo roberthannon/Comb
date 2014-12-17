@@ -4,15 +4,15 @@ namespace Comb
 {
     public class Range : IOperand
     {
-        readonly IValue _min;
-        readonly IValue _max;
+        readonly IOperand _min;
+        readonly IOperand _max;
         readonly bool _minInclusive;
         readonly bool _maxInclusive;
 
-        private Range(IValue min = null, IValue max = null, bool minInclusive = false, bool maxInclusive = false)
+        private Range(IOperand min = null, IOperand max = null, bool minInclusive = false, bool maxInclusive = false)
         {
             if (min == null && max == null)
-                throw new ArgumentNullException("min", "Both min and max cannot be null.");
+                throw new ArgumentException("Min and max cannot both be null.");
 
             // TODO check min < max?
 
@@ -23,17 +23,30 @@ namespace Comb
         }
 
         public Range(IntValue min = null, IntValue max = null, bool minInclusive = false, bool maxInclusive = false)
-            : this((IValue)min, max, minInclusive, maxInclusive)
+            : this((IOperand)min, max, minInclusive, maxInclusive)
         {
         }
 
         public Range(DoubleValue min = null, DoubleValue max = null, bool minInclusive = false, bool maxInclusive = false)
-            : this((IValue)min, max, minInclusive, maxInclusive)
+            : this((IOperand)min, max, minInclusive, maxInclusive)
         {
         }
 
         public Range(DateValue min = null, DateValue max = null, bool minInclusive = false, bool maxInclusive = false)
-            : this((IValue)min, max, minInclusive, maxInclusive)
+            : this((IOperand)min, max, minInclusive, maxInclusive)
+        {
+        }
+
+        public Range(StringValue min = null, StringValue max = null, bool minInclusive = false, bool maxInclusive = false)
+            : this((IOperand)min, max, minInclusive, maxInclusive)
+        {
+        }
+
+        /// <summary>
+        /// Bounding box search.
+        /// </summary>
+        public Range(LatLon min = null, LatLon max = null, bool minInclusive = false, bool maxInclusive = false)
+            : this((IOperand)min, max, minInclusive, maxInclusive)
         {
         }
 
@@ -52,11 +65,15 @@ namespace Comb
         {
         }
 
-        public IValue Min { get { return _min; } }
+        public Range(string min = null, string max = null, bool minInclusive = false, bool maxInclusive = false)
+            : this(min != null ? new StringValue(min) : null, max != null ? new StringValue(max) : null, minInclusive, maxInclusive)
+        {
+        }
 
-        public IValue Max { get { return _max; } }
+        public IOperand Min { get { return _min; } }
+        public IOperand Max { get { return _max; } }
 
-        public string QueryDefinition
+        public string Definition
         {
             get { return ToString(); }
         }
@@ -64,8 +81,8 @@ namespace Comb
         public override string ToString()
         {
             return string.Format("{2}{0},{1}{3}",
-                _min != null ? _min.QueryDefinition : "",
-                _max != null ? _max.QueryDefinition : "",
+                _min != null ? _min.Definition : "",
+                _max != null ? _max.Definition : "",
                 _minInclusive ? "[" : "{",
                 _maxInclusive ? "]" : "}");
         }

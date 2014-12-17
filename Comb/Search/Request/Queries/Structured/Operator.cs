@@ -7,46 +7,57 @@ namespace Comb
     public abstract class Operator : IOperator
     {
         readonly ICollection<IOperand> _operands;
-        protected readonly ICollection<Option> _options;
+        readonly ICollection<Option> _options;
         readonly IField _field;
         readonly uint? _boost;
 
-        protected Operator(ICollection<IOperand> operands, IField field = null, uint? boost = null)
+        protected Operator(IEnumerable<IOperand> operands, IField field = null, uint? boost = null)
         {
             if (operands == null)
                 throw new ArgumentNullException("operands");
 
-            if (!operands.Any())
+            _operands = operands.ToList(); // Make a copy of operands
+
+            if (_operands.Count == 0)
                 throw new ArgumentOutOfRangeException("operands", "An Operator must have at least one operand.");
 
-            _operands = operands;
+            _options = new List<Option>();
             _field = field;
             _boost = boost;
 
-            _options = new List<Option>();
-            if (Field != null) _options.Add(new Option("field", Field.Name));
-            if (Boost.HasValue) _options.Add(new Option("boost", Boost.ToString()));
+            if (Field != null) AddOption("field", Field.Name);
+            if (Boost.HasValue) AddOption("boost", Boost.ToString());
         }
 
         public abstract string Opcode { get; }
+
+        public ICollection<IOperand> Operands { get { return _operands; } }
+
+        public ICollection<Option> Options { get { return _options; } }
 
         public IField Field { get { return _field; } }
 
         public uint? Boost { get { return _boost; } }
 
-        public ICollection<Option> Options { get { return _options; } }
-
-        public ICollection<IOperand> Operands { get { return _operands; } }
-
-        public virtual string QueryDefinition
+        public virtual string Definition
         {
             get
             {
                 var components = new List<string> { Opcode };
-                components.AddRange(Options.Select(o => o.QueryDefinition));
-                components.AddRange(Operands.Select(o => o.QueryDefinition));
+                components.AddRange(Options.Select(o => o.Definition));
+                components.AddRange(Operands.Select(o => o.Definition));
                 return string.Format("({0})", string.Join(" ", components));
             }
+        }
+
+        protected Option AddOption(string name, string value)
+        {
+            var option = new Option(name, value);
+
+            // TODO Allow duplicate options with same name?
+            _options.Add(option);
+
+            return option;
         }
     }
 }

@@ -2,14 +2,17 @@ using System.Collections.Generic;
 
 namespace Comb
 {
-    public class MatchAllCondition : IOperator
+    public class MatchAllCondition : IOperator // Special operator, don't inherit from Operator
     {
-        public string QueryDefinition { get { return Opcode; } }
+        readonly IOperand[] _operands = new IOperand[0];
+        readonly Option[] _options = new Option[0];
+
+        public string Definition { get { return Opcode; } }
 
         public string Opcode { get { return "matchall"; } }
 
-        public ICollection<Option> Options { get { return new Option[0]; } }
+        public ICollection<IOperand> Operands { get { return _operands; } }
 
-        public ICollection<IOperand> Operands { get { return new IOperand[0]; } }
+        public ICollection<Option> Options { get { return _options; } }
     }
 }

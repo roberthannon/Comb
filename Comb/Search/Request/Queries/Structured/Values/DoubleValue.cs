@@ -1,6 +1,8 @@
-﻿namespace Comb
+﻿using System.Globalization;
+
+namespace Comb
 {
-    public class DoubleValue : IValue
+    public class DoubleValue : IOperand
     {
         readonly double _value;
 
@@ -11,14 +13,14 @@
 
         public double Value { get { return _value; } }
 
-        public string QueryDefinition
+        public string Definition
         {
             get { return ToString(); }
         }
 
         public override string ToString()
         {
-            return Value.ToString();
+            return _value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

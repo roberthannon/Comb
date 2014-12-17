@@ -9,7 +9,7 @@ namespace Comb
         {
             _distance = distance;
 
-            if (Distance.HasValue) _options.Add(new Option("distance", Distance.ToString()));
+            if (Distance.HasValue) AddOption("distance", Distance.ToString());
         }
 
         public NearCondition(string operand, string field = null, uint? boost = null, uint? distance = null)

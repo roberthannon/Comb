@@ -5,6 +5,6 @@
         /// <summary>
         /// The operand's string representation within a structured query.
         /// </summary>
-        string QueryDefinition { get; }
+        string Definition { get; }
     }
 }

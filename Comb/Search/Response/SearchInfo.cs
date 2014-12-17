@@ -16,6 +16,6 @@ namespace Comb
         public string Sort   { get; set; }
         public string Return { get; set; }
         public KeyValuePair<string, string>[] Facets { get; set; }
-        public KeyValuePair<string,string>[] Expressions { get; set; }
+        public KeyValuePair<string, string>[] Expressions { get; set; }
     }
 }

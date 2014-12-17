@@ -33,6 +33,7 @@ namespace Comb
             public const string Id = "_id";
             public const string Version = "_version";
             public const string AllFields = "_all_fields";
+            public const string NoFields = "_no_fields";
             public const string Score = "_score";
         }
 

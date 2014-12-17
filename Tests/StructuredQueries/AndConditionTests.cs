@@ -29,7 +29,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new AndCondition(new Collection<IOperand>());
+                new AndCondition(new Collection<IOperator>());
             },
             Throws.TypeOf<ArgumentOutOfRangeException>().ForParameter("operands"));
         }
@@ -37,7 +37,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIsAddedToOptions()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, "testfield");
+            var condition = new AndCondition(new[] { new TestCondition("TEST") }, "testfield");
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -48,7 +48,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void NullFieldIsIgnored()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") });
+            var condition = new AndCondition(new[] { new TestCondition("TEST") });
 
             Assert.That(condition.Field, Is.Null);
             Assert.That(!condition.Options.Any());
@@ -57,8 +57,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIsAddedToDefinition()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, "testfield");
-            var definition = condition.QueryDefinition;
+            var condition = new AndCondition(new[] { new TestCondition("TEST") }, "testfield");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(and field=testfield TEST)"));
         }
@@ -66,7 +66,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToOptions()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 984);
+            var condition = new AndCondition(new[] { new TestCondition("TEST") }, boost: 984);
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -77,7 +77,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void NullBoostIsIgnored()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") });
+            var condition = new AndCondition(new[] { new TestCondition("TEST") });
 
             Assert.That(condition.Boost, Is.Null);
             Assert.That(!condition.Options.Any());
@@ -86,8 +86,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToDefinition()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 8);
-            var definition = condition.QueryDefinition;
+            var condition = new AndCondition(new[] { new TestCondition("TEST") }, boost: 8);
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(and boost=8 TEST)"));
         }
@@ -95,8 +95,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void OneTermIsNotWrapped()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") });
-            var definition = condition.QueryDefinition;
+            var condition = new AndCondition(new[] { new TestCondition("TEST") });
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("TEST"));
         }
@@ -104,8 +104,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void OneTermWithOptionIsWrapped()
         {
-            var condition = new AndCondition(new Collection<IOperand> { new TestCondition("TEST") }, "somefield");
-            var definition = condition.QueryDefinition;
+            var condition = new AndCondition(new[] { new TestCondition("TEST") }, "somefield");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(and field=somefield TEST)"));
         }
@@ -113,13 +113,13 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void ManyTermsAreWrapped()
         {
-            var condition = new AndCondition(new Collection<IOperand>
+            var condition = new AndCondition(new[]
             {
                 new TestCondition("(omg)"),
                 new TestCondition("(its (a) (test))"),
                 new TestCondition("ZUBB")
             });
-            var definition = condition.QueryDefinition;
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(and (omg) (its (a) (test)) ZUBB)"));
         }

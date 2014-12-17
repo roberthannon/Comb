@@ -2,7 +2,7 @@ namespace Comb
 {
     public class NotCondition : UniOperator
     {
-        public NotCondition(IOperand operand, uint? boost = null)
+        public NotCondition(IOperator operand, uint? boost = null)
             : base(operand, null, boost)
         {
         }

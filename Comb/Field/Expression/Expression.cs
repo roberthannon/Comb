@@ -3,7 +3,7 @@ using System;
 namespace Comb
 {
     /// <summary>
-    /// Custom expression for this query.
+    /// Custom expression for this query. Used for things like sorting results.
     /// </summary>
     public class Expression : IExpression
     {

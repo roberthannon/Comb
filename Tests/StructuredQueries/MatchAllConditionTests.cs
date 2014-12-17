@@ -14,7 +14,7 @@ namespace Comb.Tests.StructuredQueries
         public void CorrectParamsAreIncluded()
         {
             var condition = new MatchAllCondition();
-            var definition = condition.QueryDefinition;
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("matchall"));
         }

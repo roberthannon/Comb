@@ -22,5 +22,8 @@ namespace Comb
         }
 
         public string Name { get { return _name; } }
+
+        // TODO Might be useful
+        //public FieldType Type { get; set; }
     }
 }

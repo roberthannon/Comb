@@ -38,7 +38,7 @@ namespace Comb.Tests
         {
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
-                Query = new StructuredQuery(new FieldCondition("one", "two"))
+                Query = new StructuredQuery(new FieldCondition("two", "one"))
             });
 
             Assert.That(response.Request.Parser, Is.EqualTo("structured"));
@@ -110,7 +110,7 @@ namespace Comb.Tests
         {
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
-                Query = new StructuredQuery(new StringValue("yellow")),
+                Query = new StructuredQuery(new FieldCondition("yellow")),
                 Return = new List<Return> { new Return("this"), new Return("that"), Return.Score }
             });
 
@@ -142,7 +142,7 @@ namespace Comb.Tests
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
-                Filter = new StructuredQuery(new AndCondition(new IOperand[] { new FieldCondition("somefield", "thingy 1"), new StringValue("thingy 2") }))
+                Filter = new StructuredQuery(new AndCondition(new[] { new FieldCondition("thingy 1", "somefield"), new FieldCondition("thingy 2") }))
             });
 
             Assert.That(response.Request.Filter, Is.EqualTo("(and somefield:'thingy 1' 'thingy 2')"));

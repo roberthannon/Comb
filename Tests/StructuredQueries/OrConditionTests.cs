@@ -29,7 +29,7 @@ namespace Comb.Tests.StructuredQueries
         {
             Assert.That(() =>
             {
-                new OrCondition(new IOperand[0]);
+                new OrCondition(new IOperator[0]);
             },
             Throws.TypeOf<ArgumentOutOfRangeException>().ForParameter("operands"));
         }
@@ -37,7 +37,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToOptions()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 984);
+            var condition = new OrCondition(new IOperator[]  { new TestCondition("TEST") }, boost: 984);
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -48,7 +48,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void NullBoostIsIgnored()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") });
+            var condition = new OrCondition(new IOperator[] { new TestCondition("TEST") });
 
             Assert.That(condition.Boost, Is.Null);
             Assert.That(!condition.Options.Any());
@@ -57,7 +57,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIsAddedToOptions()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, field: "testfield");
+            var condition = new OrCondition(new IOperator[] { new TestCondition("TEST") }, field: "testfield");
             var option = condition.Options.Single();
 
             Assert.That(option, Is.Not.Null);
@@ -68,7 +68,7 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void NullFieldIsIgnored()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") });
+            var condition = new OrCondition(new[] { new TestCondition("TEST") });
 
             Assert.That(condition.Field, Is.Null);
             Assert.That(!condition.Options.Any());
@@ -77,8 +77,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void FieldIsAddedToDefinition()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, field: "testfield");
-            var definition = condition.QueryDefinition;
+            var condition = new OrCondition(new[] { new TestCondition("TEST") }, field: "testfield");
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(or field=testfield TEST)"));
         }
@@ -86,8 +86,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void BoostIsAddedToDefinition()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 8);
-            var definition = condition.QueryDefinition;
+            var condition = new OrCondition(new[] { new TestCondition("TEST") }, boost: 8);
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(or boost=8 TEST)"));
         }
@@ -95,8 +95,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void OneTermIsNotWrapped()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") });
-            var definition = condition.QueryDefinition;
+            var condition = new OrCondition(new[] { new TestCondition("TEST") });
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("TEST"));
         }
@@ -104,8 +104,8 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void OneTermWithOptionIsWrapped()
         {
-            var condition = new OrCondition(new Collection<IOperand> { new TestCondition("TEST") }, boost: 3);
-            var definition = condition.QueryDefinition;
+            var condition = new OrCondition(new[] { new TestCondition("TEST") }, boost: 3);
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(or boost=3 TEST)"));
         }
@@ -113,13 +113,13 @@ namespace Comb.Tests.StructuredQueries
         [Test]
         public void ManyTermsAreWrapped()
         {
-            var condition = new OrCondition(new Collection<IOperand>
+            var condition = new OrCondition(new[]
             {
                 new TestCondition("(omg)"),
                 new TestCondition("(its (a) (test))"),
                 new TestCondition("ZUBB")
             });
-            var definition = condition.QueryDefinition;
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(or (omg) (its (a) (test)) ZUBB)"));
         }

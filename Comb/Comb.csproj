@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Field\Expression\Haversin.cs" />
+    <Compile Include="Field\FieldType.cs" />
     <Compile Include="Search\Request\Facets\BucketFacet.cs" />
-    <Compile Include="Search\Request\Queries\Structured\Values\IValue.cs" />
+    <Compile Include="Search\Request\Queries\Structured\Values\LatLon.cs" />
     <Compile Include="Search\Response\FacetBucketResult.cs" />
     <Compile Include="Search\Response\EmptyResult.cs" />
     <Compile Include="Search\Request\Facets\Bucket.cs" />

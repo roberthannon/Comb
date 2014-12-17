@@ -6,8 +6,8 @@ namespace Comb
     {
         string Opcode { get; }
 
-        ICollection<Option> Options { get; }
-
         ICollection<IOperand> Operands { get; }
+
+        ICollection<Option> Options { get; }
     }
 }

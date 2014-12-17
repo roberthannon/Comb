@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace Comb
 {
-    public class StringValue : IValue
+    public class StringValue : IOperand
     {
         readonly string _value;
 
@@ -22,14 +21,14 @@ namespace Comb
 
         public string Value { get { return _value; } }
 
-        public string QueryDefinition
+        public string Definition
         {
             get { return string.Format("'{0}'", this); }
         }
 
         public override string ToString()
         {
-            return Utilities.EncodeValue(Value); // Sometimes want a string value not wrapped in single quotes
+            return Utilities.EncodeValue(_value); // Sometimes want a string value not wrapped in single quotes
         }
     }
 }

@@ -27,14 +27,14 @@ namespace Comb
         {
             get
             {
-                // Search sort for expressions
+                // Find sort expressions
                 foreach (var sort in Sort)
                 {
                     var expression = sort.Field as IExpression;
                     if (expression != null)
                         yield return expression;
                 }
-                // Search return for expressions
+                // Find return expressions
                 foreach (var ret in Return)
                 {
                     var expression = ret.Field as IExpression;

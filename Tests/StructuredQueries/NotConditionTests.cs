@@ -50,7 +50,7 @@ namespace Comb.Tests.StructuredQueries
         public void BoostIsAddedToDefinition()
         {
             var condition = new NotCondition(new TestCondition("TEST"), 3);
-            var definition = condition.QueryDefinition;
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(not boost=3 TEST)"));
         }
@@ -59,7 +59,7 @@ namespace Comb.Tests.StructuredQueries
         public void TermIsWrapped()
         {
             var condition = new NotCondition(new TestCondition("TEST"));
-            var definition = condition.QueryDefinition;
+            var definition = condition.Definition;
 
             Assert.That(definition, Is.EqualTo("(not TEST)"));
         }

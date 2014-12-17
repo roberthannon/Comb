@@ -2,7 +2,7 @@
 
 namespace Comb
 {
-    public class DateValue : IValue
+    public class DateValue : IOperand
     {
         readonly DateTime _value;
 
@@ -13,14 +13,14 @@ namespace Comb
 
         public DateTime Value { get { return _value; } }
 
-        public string QueryDefinition
+        public string Definition
         {
             get { return ToString(); }
         }
 
         public override string ToString()
         {
-            return string.Format("'{0}'", Value.ToString(Constants.DateFormat)); // Always wrapped in single quotes?
+            return string.Format("'{0}'", _value.ToString(Constants.DateFormat)); // Always wrapped in single quotes?
         }
     }
 }

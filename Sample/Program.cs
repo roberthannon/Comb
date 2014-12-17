@@ -23,10 +23,10 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
                 //Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new AndCondition(new IOperand[]
+                Query = new StructuredQuery(new AndCondition(new[]
                 {
-                    new FieldCondition("test", "boop"),
-                    new StringValue("beep")
+                    new FieldCondition("boop", "test"),
+                    new FieldCondition("beep"),
                     //new AndCondition(new[]
                     //{
                     //    new StringCondition("Beep"), 

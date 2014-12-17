@@ -4,11 +4,11 @@ namespace Comb.Tests.Support
 {
     class TestCondition : IOperator
     {
-        public string QueryDefinition { get; private set; }
+        public string Definition { get; private set; }
 
         public TestCondition(string definition)
         {
-            QueryDefinition = definition;
+            Definition = definition;
         }
 
         public string Opcode
