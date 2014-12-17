@@ -15,12 +15,12 @@ namespace Comb
 
         public string Definition
         {
-            get { return ToString(); }
+            get { return Utilities.WrapValue(ToString()); }
         }
 
         public override string ToString()
         {
-            return string.Format("'{0}'", _value.ToString(Constants.DateFormat)); // Always wrapped in single quotes?
+            return Utilities.DateString(_value); // Not wrapped in single quotes
         }
     }
 }

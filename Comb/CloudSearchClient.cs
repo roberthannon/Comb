@@ -170,9 +170,11 @@ namespace Comb
                 var responseObject = _jsonSerializer.Deserialize<UpdateResponse>(jsonReader);
                 if (responseObject != null && responseObject.Message != null)
                     message = responseObject.Message;
+
+                return new UpdateException(responseObject, httpResponse.StatusCode, message);
             }
 
-            return new UpdateException(httpResponse.StatusCode, message);
+            return new UpdateException(null, httpResponse.StatusCode, message);
         }
     }
 }

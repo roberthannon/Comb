@@ -5,12 +5,12 @@ namespace Comb
 {
     public class OrCondition : Operator
     {
-        public OrCondition(ICollection<IOperator> operands, IField field = null, uint? boost = null)
+        public OrCondition(IEnumerable<IOperator> operands, IField field = null, uint? boost = null)
             : base(operands, field, boost)
         {
         }
 
-        public OrCondition(ICollection<IOperator> operands, string field, uint? boost = null)
+        public OrCondition(IEnumerable<IOperator> operands, string field, uint? boost = null)
             : this(operands, new Field(field), boost)
         {
         }

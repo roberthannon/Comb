@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Comb
 {
@@ -20,6 +21,33 @@ namespace Comb
             value = value.Replace("'", @"\'");
 
             return value;
+        }
+
+        /// <summary>
+        /// The CloudSearch string representation of a date/time value.
+        /// </summary>
+        public static string DateString(DateTime dateTime)
+        {
+            return string.Format("{0}", dateTime.ToString(Constants.DateFormat));
+        }
+
+        /// <summary>
+        /// The CloudSearch string representation of a lat/lon value.
+        /// </summary>
+        public static string LatLonString(double latitude, double longitude)
+        {
+            return string.Format("{0},{1}", latitude, longitude);
+        }
+
+        /// <summary>
+        /// String, Date, and LatLon values sometimes need to be wrapped in single quotes, but other times they are not.
+        /// </summary>
+        public static string WrapValue(string value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("value");
+
+            return string.Format("'{0}'", value);
         }
     }
 }

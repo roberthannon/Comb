@@ -23,12 +23,12 @@ namespace Comb
 
         public string Definition
         {
-            get { return string.Format("'{0}'", this); }
+            get { return Utilities.WrapValue(ToString()); }
         }
 
         public override string ToString()
         {
-            return Utilities.EncodeValue(_value); // Sometimes want a string value not wrapped in single quotes
+            return Utilities.EncodeValue(_value); // Not wrapped in single quotes
         }
     }
 }

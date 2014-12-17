@@ -12,6 +12,11 @@ namespace Comb
     public class UpdateException : Exception
     {
         /// <summary>
+        /// The response object returned from CloudSearch.
+        /// </summary>
+        public UpdateResponse Response { get; protected set; }
+
+        /// <summary>
         /// The HTTP status code returned by CloudSearch.
         /// </summary>
         public HttpStatusCode HttpStatusCode { get; protected set; }
@@ -25,9 +30,10 @@ namespace Comb
             get { return 500 <= (int) HttpStatusCode; }
         }
 
-        public UpdateException(HttpStatusCode httpStatusCode, string message)
+        public UpdateException(UpdateResponse response, HttpStatusCode httpStatusCode, string message)
             : base(message)
         {
+            Response = response;
             HttpStatusCode = httpStatusCode;
         }
     }

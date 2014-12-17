@@ -59,9 +59,14 @@ namespace Comb
         {
         }
 
-        public override string ToString()
+        public IOperand Operand
         {
-            return _operand.ToString();
+            get { return _operand; }
+        }
+
+        public string Definition
+        {
+            get { return _operand.ToString(); } // Operand is NOT wrapped in single quotes in bucket definition
         }
     }
 }

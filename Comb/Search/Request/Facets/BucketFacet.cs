@@ -36,7 +36,7 @@ namespace Comb
             get
             {
                 return string.Format("{{buckets:[{0}],method:\"{1}\"}}",
-                    string.Join(",", _buckets.Select(b => string.Format("\"{0}\"", b))),
+                    string.Join(",", _buckets.Select(b => string.Format("\"{0}\"", b.Definition))),
                     _method.ToString().ToLower());
             }
         }

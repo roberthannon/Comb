@@ -5,12 +5,12 @@ namespace Comb
 {
     public class AndCondition : Operator
     {
-        public AndCondition(ICollection<IOperator> operands, IField field = null, uint? boost = null)
+        public AndCondition(IEnumerable<IOperator> operands, IField field = null, uint? boost = null)
             : base(operands, field, boost)
         {
         }
 
-        public AndCondition(ICollection<IOperator> operands, string field, uint? boost = null)
+        public AndCondition(IEnumerable<IOperator> operands, string field, uint? boost = null)
             : this(operands, new Field(field), boost)
         {
         }

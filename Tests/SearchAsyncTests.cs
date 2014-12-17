@@ -66,7 +66,7 @@ namespace Comb.Tests
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
-                Facets = new Facet[]
+                Facets = new[]
                 {
                     new Facet("status"),
                     new SortFacet("genre", FacetSortType.Bucket, 6),

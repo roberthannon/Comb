@@ -16,12 +16,12 @@
 
         public string Definition
         {
-            get { return ToString(); }
+            get { return Utilities.WrapValue(ToString()); }
         }
 
         public override string ToString()
         {
-            return string.Format("'{0},{1}'", _latitude, _longitude); // Always wrapped in single quotes?
+            return Utilities.LatLonString(_latitude, _longitude); // Not wrapped in single quotes
         }
     }
 }
