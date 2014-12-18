@@ -7,7 +7,7 @@
     <description>$description$</description>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <releaseNotes>Support for filter queries fields.</releaseNotes>
+    <releaseNotes>Support for facets, more informative errors, and more complete structured query API.</releaseNotes>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <projectUrl>https://github.com/BarryDahlberg/Comb</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
