@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using Comb.StructuredQueries;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Comb.Sample
 {
     class Program
     {
-        const string SearchEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
-
-        public static readonly Field Silly = new Field("silly");
-        public static readonly Field Test = new Field("test");
+        const string SampleEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
+            //"DEV.cloudsearch.amazonaws.com";
 
         static void Main()
+        {
+            Search();
+            Update();
+        }
+
+        static void Search()
         {
             // TODO: Restriction of returned fields - probably based on result class requested.
             // TODO: Custom sorting expressions.
@@ -20,38 +24,44 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
                 //Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new AndCondition(new IOperand[]
-                {
-                    new StringCondition("test", "boop"),
-                    new StringCondition("beep"),
-                    //new AndCondition(new[]
-                    //{
-                    //    new StringCondition("Beep"), 
-                    //    new StringCondition("Bing")
-                    //})
-                })),
-                //Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
+                Query = new StructuredQuery(new AndCondition(new[] { new FieldCondition("boop", "test"), new FieldCondition("beep") })),
+                //Query = new StructuredQuery(new FieldCondition("profile", "doctype")),
                 Start = 0,
                 Size = 20,
-                Sort = new List<Sort>
+                Sort = new[]
                 {
-                    new Sort(Silly, SortDirection.Descending)
+                    new Sort("literal", SortDirection.Descending)
+                    //new Sort(SortFields.Score, SortDirection.Descending)
                 },
-                Return = new List<Return>
+                Return = new[]
                 {
                     Return.AllFields,
-                    Return.Score,
+                    Return.Score
+                },
+                Facets = new Facet[]
+                {
+                    //new BucketFacet("location", new[] {
+                    //    new Bucket(new Range(new LatLon(-36.81670599, 174.58786011), new LatLon(-36.96854668,174.96757507)))
+                    //}),
+                    //new BucketFacet("followercount", new[]
+                    //{
+                    //    new Bucket(new Range(0, 10, maxInclusive: true)),
+                    //    new Bucket(new Range(10, 100, maxInclusive: true)),
+                    //    new Bucket(new Range(100, 500, maxInclusive: true)),
+                    //    new Bucket(new Range(500))
+                    //})
                 }
             };
 
             var client = new CloudSearchClient(new CloudSearchSettings
             {
-                Endpoint = SearchEndpoint
+                Endpoint = SampleEndpoint
             });
 
             try
             {
-                var results = client.SearchAsync<Result>(query).Result;
+                var results = client.SearchAsync<SearchResult>(query).Result;
+                //var results = client.SearchAsync<Dictionary<string, string>>(query).Result;
 
                 Console.WriteLine("URL:      " + results.Request.Url);
                 Console.WriteLine("Resource: " + results.Status.ResourceId);
@@ -61,13 +71,37 @@ namespace Comb.Sample
                 Console.WriteLine("Returned: " + results.Hits.Hit.Length);
                 Console.WriteLine();
 
+                Console.WriteLine("HITS");
+                Console.WriteLine();
+
                 foreach (var hit in results.Hits.Hit)
                 {
                     Console.WriteLine(hit.Id);
-                    Console.WriteLine(hit.Fields.Test);
-                    Console.WriteLine(hit.Fields.Literal);
-                    Console.WriteLine(hit.Fields.Score);
+
+                    Console.WriteLine("  score: {0}", hit.Fields.Score);
+                    Console.WriteLine("  test: {0}", hit.Fields.Test);
+                    Console.WriteLine("  literal: {0}", hit.Fields.Literal);
+
+                    //foreach (var field in hit.Fields)
+                    //    Console.WriteLine("  {0}: {1}", field.Key, field.Value);
+                }
+                Console.WriteLine();
+
+                if (results.Facets != null)
+                {
+                    Console.WriteLine("FACETS");
                     Console.WriteLine();
+
+                    foreach (var facet in results.Facets)
+                    {
+                        Console.WriteLine(facet.Key);
+                        var facetResult = facet.Value;
+
+                        foreach (var bucket in facetResult.Buckets)
+                        {
+                            Console.WriteLine("  bucket: {0} \t count: {1}", bucket.Value, bucket.Count);
+                        }
+                    }
                 }
             }
             catch (AggregateException ex)
@@ -80,7 +114,52 @@ namespace Comb.Sample
 
                     if (cloudSearchException != null)
                     {
-                        Console.WriteLine("Status: ({0}) {1}", (int) cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
+                        Console.WriteLine("Status: ({0}) {1}", (int)cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
+                        Console.WriteLine("Error:  " + inner.Message);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: " + inner.Message);
+                    }
+                }
+            }
+        }
+
+        static void Update()
+        {
+            var client = new CloudSearchClient(new CloudSearchSettings
+            {
+                Endpoint = SampleEndpoint
+            });
+
+            try
+            {
+                var documentRequests = new[]
+                {
+                    new Add("54321", new IndexDoc{ Test = "bacon and cheese", Literal = "blue", LiteralArray = new[] { "cheese", "colours" }}),
+                    new Add("12345", new IndexDoc{ Test = "things and apples", Literal = "whyohwhy" }),
+                    new Add("12333", new IndexDoc{ Test = "the thing that should not be", Literal = "yellow" })
+                };
+
+                var results = client.UpdateAsync(documentRequests).Result;
+
+                Console.WriteLine("Status:      " + results.Status);
+                Console.WriteLine("Adds: " + results.Adds);
+                Console.WriteLine("Deletes:     " + results.Deletes);
+                Console.WriteLine("Message:    " + results.Message);
+                Console.WriteLine();
+            }
+            catch (AggregateException ex)
+            {
+                foreach (var inner in ex.InnerExceptions)
+                {
+                    Console.WriteLine(inner.GetType().Name);
+
+                    var cloudSearchException = inner as UpdateException;
+
+                    if (cloudSearchException != null)
+                    {
+                        Console.WriteLine("Status: ({0}) {1}", (int)cloudSearchException.HttpStatusCode, cloudSearchException.HttpStatusCode);
                         Console.WriteLine("Error:  " + inner.Message);
                     }
                     else
@@ -92,7 +171,7 @@ namespace Comb.Sample
         }
     }
 
-    public class Result
+    public class SearchResult
     {
         public string Test { get; set; }
         
@@ -100,5 +179,20 @@ namespace Comb.Sample
 
         [JsonProperty(Constants.Fields.Score)]
         public float Score { get; set; }
+    }
+
+    public class IndexDoc
+    {
+        public string Literal { get; set; }
+
+        public string Test { get; set; }
+
+        [JsonProperty("literal_array")]
+        public IEnumerable<string> LiteralArray { get; set; }
+
+        public IndexDoc()
+        {
+            LiteralArray = Enumerable.Empty<string>();
+        }
     }
 }

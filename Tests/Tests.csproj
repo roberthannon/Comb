@@ -61,12 +61,19 @@
   <ItemGroup>
     <Compile Include="SearchAsyncTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructuredQueries\MatchAllConditionTests.cs" />
+    <Compile Include="StructuredQueries\PrefixConditionTests.cs" />
+    <Compile Include="StructuredQueries\RangeConditionTests.cs" />
+    <Compile Include="StructuredQueries\RangeTests.cs" />
+    <Compile Include="StructuredQueries\TermConditionTests.cs" />
+    <Compile Include="StructuredQueries\PhraseConditionTests.cs" />
+    <Compile Include="StructuredQueries\NearConditionTests.cs" />
     <Compile Include="StructuredQueries\NotConditionTests.cs" />
     <Compile Include="StructuredQueries\AndConditionTests.cs" />
     <Compile Include="Support\TestCondition.cs" />
     <Compile Include="Support\ConstraintExtensions.cs" />
     <Compile Include="StructuredQueries\OrConditionTests.cs" />
-    <Compile Include="StructuredQueries\StringConditionTests.cs" />
+    <Compile Include="StructuredQueries\FieldConditionTests.cs" />
     <Compile Include="Support\TestHttpClientFactory.cs" />
     <Compile Include="Support\TestHttpContent.cs" />
     <Compile Include="Support\TestHttpMessageHandlerStub.cs" />

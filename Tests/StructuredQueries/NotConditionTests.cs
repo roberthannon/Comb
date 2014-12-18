@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Comb.StructuredQueries;
 using Comb.Tests.Support;
 using NUnit.Framework;
 
@@ -19,32 +18,12 @@ namespace Comb.Tests.StructuredQueries
         }
 
         [Test]
-        public void FieldIsAddedToOptions()
-        {
-            var condition = new NotCondition(new TestCondition("TEST"), field: "testfield");
-            var option = condition.Options.Single();
-
-            Assert.That(option, Is.Not.Null);
-            Assert.That(option.Name, Is.EqualTo("field"));
-            Assert.That(option.Value, Is.EqualTo("testfield"));
-        }
-
-        [Test]
         public void NullFieldIsIgnored()
         {
             var condition = new NotCondition(new TestCondition("TEST"));
 
             Assert.That(condition.Field, Is.Null);
             Assert.That(!condition.Options.Any());
-        }
-
-        [Test]
-        public void FieldIsAddedToDefinition()
-        {
-            var condition = new NotCondition(new TestCondition("TEST"), field: "testfield");
-            var definition = condition.Definition;
-
-            Assert.That(definition, Is.EqualTo("(not field=testfield TEST)"));
         }
 
         [Test]

@@ -1,7 +1,9 @@
+using System;
+
 namespace Comb
 {
     /// <summary>
-    /// Custom expression for this query.
+    /// Custom expression for this query. Used for things like sorting results.
     /// </summary>
     public class Expression : IExpression
     {
@@ -10,6 +12,12 @@ namespace Comb
 
         public Expression(string name, string definition)
         {
+            if (name == null)
+                throw new ArgumentNullException("name");
+
+            if (definition == null)
+                throw new ArgumentNullException("definition");
+
             _name = name;
             _definition = definition;
         }

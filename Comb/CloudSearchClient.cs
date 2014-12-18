@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -7,7 +9,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json;
 
 namespace Comb
 {
@@ -30,20 +31,17 @@ namespace Comb
             _documentClient = settings.HttpClientFactory.MakeInstance();
             _documentClient.BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
 
-            _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
+            _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
 
-        public Task UpdateAsync(DocumentRequest request)
+        public Task<UpdateResponse> UpdateAsync(DocumentRequest request)
         {
-            return PostDocuments<DocumentResponse>(_documentClient, "documents/batch", new List<DocumentRequest>
-            {
-                request
-            });
+            return UpdateAsync(new[] { request });
         }
 
-        public Task UpdateAsync(IEnumerable<DocumentRequest> requests)
+        public Task<UpdateResponse> UpdateAsync(IEnumerable<DocumentRequest> requests)
         {
-            return PostDocuments<DocumentResponse>(_documentClient, "documents/batch", requests);
+            return PostDocuments<UpdateResponse>(_documentClient, "documents/batch", requests);
         }
 
         public Task<SearchResponse<EmptyResult>> SearchAsync(SearchRequest request)
@@ -74,21 +72,26 @@ namespace Comb
                 queryString["size"] = info.Size = request.Size.ToString();
 
             if (request.Sort.Any())
-                queryString["sort"] = info.Sort = string.Join(",", request.Sort.Select(x => x.ToString()).ToArray());
+                queryString["sort"] = info.Sort = string.Join(",", request.Sort);
 
             if (request.Return.Any())
                 queryString["return"] = info.Return = string.Join(",", request.Return);
 
-            if (request.Expressions.Any())
+            info.Facets = request.Facets.Select(facet =>
             {
-                info.Expressions = request.Expressions.Select((expression, i) =>
-                {
-                    var queryParamName = string.Format("expr.{0}", expression.Name);
-                    var queryParamValue = expression.Definition;
-                    queryString[queryParamName] = queryParamValue;
-                    return new KeyValuePair<string, string>(queryParamName, queryParamValue);
-                }).ToArray();
-            }
+                var queryParamName = string.Format("facet.{0}", facet.Field.Name);
+                var queryParamValue = facet.Definition;
+                queryString[queryParamName] = queryParamValue;
+                return new KeyValuePair<string, string>(queryParamName, queryParamValue);
+            }).ToArray();
+
+            info.Expressions = request.Expressions.Select(expression =>
+            {
+                var queryParamName = string.Format("expr.{0}", expression.Name);
+                var queryParamValue = expression.Definition;
+                queryString[queryParamName] = queryParamValue;
+                return new KeyValuePair<string, string>(queryParamName, queryParamValue);
+            }).ToArray();
 
             return RunSearch<T>(_searchClient, "search", queryString, info);
         }
@@ -105,7 +108,7 @@ namespace Comb
                 using (var jsonReader = new JsonTextReader(streamReader))
                 {
                     if (!httpResponse.IsSuccessStatusCode)
-                        throw HandleError(httpResponse, streamReader, jsonReader, info);
+                        throw HandleSearchError(httpResponse, jsonReader, info);
 
                     var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
                     response.Request = info;
@@ -126,19 +129,19 @@ namespace Comb
 
             using (var response = await httpClient.PostAsync(url, input))
             {
-                if (!response.IsSuccessStatusCode)
-                    throw new NotImplementedException();
-
                 using (var content = await response.Content.ReadAsStreamAsync())
                 using (var streamReader = new StreamReader(content, Encoding.UTF8))
                 using (var jsonReader = new JsonTextReader(streamReader))
                 {
+                    if (!response.IsSuccessStatusCode)
+                        throw HandleUpdateError(response, jsonReader);
+
                     return _jsonSerializer.Deserialize<T>(jsonReader);
                 }
             }
         }
 
-        Exception HandleError(HttpResponseMessage httpResponse, StreamReader streamReader, JsonTextReader jsonReader, SearchInfo info)
+        Exception HandleSearchError(HttpResponseMessage httpResponse, JsonTextReader jsonReader, SearchInfo info)
         {
             // TODO: 500 level errors should be marked Retry
             // TODO: 400 level errors should be marked as bad input.
@@ -146,9 +149,32 @@ namespace Comb
             // http://docs.aws.amazon.com/cloudsearch/latest/developerguide/error-handling.html
             // http://docs.aws.amazon.com/general/latest/gr/api-retries.html
 
-            var response = _jsonSerializer.Deserialize<ErrorResponse>(jsonReader);
+            var response = _jsonSerializer.Deserialize<SearchErrorResponse>(jsonReader);
 
             return new SearchException(info, httpResponse.StatusCode, response.Message);
+        }
+
+        Exception HandleUpdateError(HttpResponseMessage httpResponse, JsonTextReader jsonReader)
+        {
+            // TODO: 500 level errors should be marked Retry
+            // TODO: 400 level errors should be marked as bad input.
+            // TODO: Backoffs etc
+            // http://docs.aws.amazon.com/cloudsearch/latest/developerguide/error-handling.html
+            // http://docs.aws.amazon.com/general/latest/gr/api-retries.html
+
+            var message = httpResponse.ReasonPhrase;
+
+            // If we have a 400 error, get error message from returned json object
+            if (400 <= (int)httpResponse.StatusCode && (int)httpResponse.StatusCode < 500)
+            {
+                var responseObject = _jsonSerializer.Deserialize<UpdateResponse>(jsonReader);
+                if (responseObject != null && responseObject.Message != null)
+                    message = responseObject.Message;
+
+                return new UpdateException(responseObject, httpResponse.StatusCode, message);
+            }
+
+            return new UpdateException(null, httpResponse.StatusCode, message);
         }
     }
 }
