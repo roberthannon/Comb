@@ -48,6 +48,8 @@ namespace Comb
         public Range(LatLon min = null, LatLon max = null, bool minInclusive = false, bool maxInclusive = false)
             : this((IOperand)min, max, minInclusive, maxInclusive)
         {
+            //if (min == null || max == null) // TODO?
+            //    throw new ArgumentException("Range query on a latlonfield cannot be open ended.");
         }
 
         public Range(int? min = null, int? max = null, bool minInclusive = false, bool maxInclusive = false)

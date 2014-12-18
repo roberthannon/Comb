@@ -8,6 +8,7 @@ namespace Comb.Sample
     class Program
     {
         const string SampleEndpoint = "comb-kcm6nswvggn4fv627t5zahkwba.ap-southeast-2.cloudsearch.amazonaws.com";
+            //"DEV.cloudsearch.amazonaws.com";
 
         static void Main()
         {
@@ -23,27 +24,32 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
                 //Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new AndCondition(new[]
-                {
-                    new FieldCondition("boop", "test"),
-                    new FieldCondition("beep"),
-                    //new AndCondition(new[]
-                    //{
-                    //    new StringCondition("Beep"), 
-                    //    new StringCondition("Bing")
-                    //})
-                })),
-                //Query = new StructuredQuery(new OrCondition(new[] { new StringCondition("literal", "one") }, 123)),
+                Query = new StructuredQuery(new AndCondition(new[] { new FieldCondition("boop", "test"), new FieldCondition("beep") })),
+                //Query = new StructuredQuery(new FieldCondition("profile", "doctype")),
                 Start = 0,
                 Size = 20,
-                Sort = new List<Sort>
+                Sort = new[]
                 {
                     new Sort("literal", SortDirection.Descending)
+                    //new Sort(SortFields.Score, SortDirection.Descending)
                 },
-                Return = new List<Return>
+                Return = new[]
                 {
                     Return.AllFields,
-                    Return.Score,
+                    Return.Score
+                },
+                Facets = new Facet[]
+                {
+                    //new BucketFacet("location", new[] {
+                    //    new Bucket(new Range(new LatLon(-36.81670599, 174.58786011), new LatLon(-36.96854668,174.96757507)))
+                    //}),
+                    //new BucketFacet("followercount", new[]
+                    //{
+                    //    new Bucket(new Range(0, 10, maxInclusive: true)),
+                    //    new Bucket(new Range(10, 100, maxInclusive: true)),
+                    //    new Bucket(new Range(100, 500, maxInclusive: true)),
+                    //    new Bucket(new Range(500))
+                    //})
                 }
             };
 
@@ -55,6 +61,7 @@ namespace Comb.Sample
             try
             {
                 var results = client.SearchAsync<SearchResult>(query).Result;
+                //var results = client.SearchAsync<Dictionary<string, string>>(query).Result;
 
                 Console.WriteLine("URL:      " + results.Request.Url);
                 Console.WriteLine("Resource: " + results.Status.ResourceId);
@@ -64,13 +71,37 @@ namespace Comb.Sample
                 Console.WriteLine("Returned: " + results.Hits.Hit.Length);
                 Console.WriteLine();
 
+                Console.WriteLine("HITS");
+                Console.WriteLine();
+
                 foreach (var hit in results.Hits.Hit)
                 {
                     Console.WriteLine(hit.Id);
-                    Console.WriteLine(hit.Fields.Test);
-                    Console.WriteLine(hit.Fields.Literal);
-                    Console.WriteLine(hit.Fields.Score);
+
+                    Console.WriteLine("  score: {0}", hit.Fields.Score);
+                    Console.WriteLine("  test: {0}", hit.Fields.Test);
+                    Console.WriteLine("  literal: {0}", hit.Fields.Literal);
+
+                    //foreach (var field in hit.Fields)
+                    //    Console.WriteLine("  {0}: {1}", field.Key, field.Value);
+                }
+                Console.WriteLine();
+
+                if (results.Facets != null)
+                {
+                    Console.WriteLine("FACETS");
                     Console.WriteLine();
+
+                    foreach (var facet in results.Facets)
+                    {
+                        Console.WriteLine(facet.Key);
+                        var facetResult = facet.Value;
+
+                        foreach (var bucket in facetResult.Buckets)
+                        {
+                            Console.WriteLine("  bucket: {0} \t count: {1}", bucket.Value, bucket.Count);
+                        }
+                    }
                 }
             }
             catch (AggregateException ex)
