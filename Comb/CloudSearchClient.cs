@@ -168,6 +168,7 @@ namespace Comb
             if (400 <= (int)httpResponse.StatusCode && (int)httpResponse.StatusCode < 500)
             {
                 var responseObject = _jsonSerializer.Deserialize<UpdateResponse>(jsonReader);
+
                 if (responseObject != null && responseObject.Message != null)
                     message = responseObject.Message;
 

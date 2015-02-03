@@ -1,15 +1,14 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace Comb
 {
     /// <summary>
-    /// An error occured while making a search request. Refer to the following API best practices on
+    /// An error occured while making an update request. Refer to the following API best practices on
     /// on handling and retrying these errors.
     /// http://docs.aws.amazon.com/cloudsearch/latest/developerguide/error-handling.html
     /// http://docs.aws.amazon.com/general/latest/gr/api-retries.html
     /// </summary>
-    public class UpdateException : Exception
+    public class UpdateException : CloudSearchException
     {
         /// <summary>
         /// The response object returned from CloudSearch.
@@ -17,24 +16,13 @@ namespace Comb
         public UpdateResponse Response { get; protected set; }
 
         /// <summary>
-        /// The HTTP status code returned by CloudSearch.
+        /// Initializes a new instance of <see cref="UpdateException" /> with the given response,
+        /// status code, and message.
         /// </summary>
-        public HttpStatusCode HttpStatusCode { get; protected set; }
-
-        /// <summary>
-        /// Returns true if this is a transient CloudSearch error that Amazon recommends you retry,
-        /// otherwise false.
-        /// </summary>
-        public bool ShouldRetry
-        {
-            get { return 500 <= (int) HttpStatusCode; }
-        }
-
         public UpdateException(UpdateResponse response, HttpStatusCode httpStatusCode, string message)
-            : base(message)
+            : base(httpStatusCode, message)
         {
             Response = response;
-            HttpStatusCode = httpStatusCode;
         }
     }
 }

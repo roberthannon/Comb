@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CloudSearchException.cs" />
     <Compile Include="Field\Expression\Haversin.cs" />
     <Compile Include="Field\FieldType.cs" />
     <Compile Include="Search\Request\Facets\BucketFacet.cs" />
