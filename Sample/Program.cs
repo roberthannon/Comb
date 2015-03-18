@@ -53,10 +53,7 @@ namespace Comb.Sample
                 }
             };
 
-            var client = new CloudSearchClient(new CloudSearchSettings
-            {
-                Endpoint = SampleEndpoint
-            });
+            var client = new CloudSearchClient(new CloudSearchSettings(SampleEndpoint));
 
             try
             {
@@ -127,10 +124,7 @@ namespace Comb.Sample
 
         static void Update()
         {
-            var client = new CloudSearchClient(new CloudSearchSettings
-            {
-                Endpoint = SampleEndpoint
-            });
+            var client = new CloudSearchClient(new CloudSearchSettings(SampleEndpoint));
 
             try
             {
@@ -144,9 +138,9 @@ namespace Comb.Sample
                 var results = client.UpdateAsync(documentRequests).Result;
 
                 Console.WriteLine("Status:      " + results.Status);
-                Console.WriteLine("Adds: " + results.Adds);
+                Console.WriteLine("Adds:        " + results.Adds);
                 Console.WriteLine("Deletes:     " + results.Deletes);
-                Console.WriteLine("Message:    " + results.Message);
+                Console.WriteLine("Message:     " + results.Message);
                 Console.WriteLine();
             }
             catch (AggregateException ex)

@@ -1,26 +1,37 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Comb
 {
-    public class CloudSearchSettings
+    public class CloudSearchSettings : ICloudSearchSettings
     {
-        internal static readonly IHttpClientFactory DefaultHttpClientFactory = new DefaultHttpClientFactory();
-        internal static readonly CloudSearchSettings Default = new CloudSearchSettings();
+        readonly string _endpoint;
+        readonly IHttpClientFactory _httpClientFactory;
+        readonly JsonSerializerSettings _documentSerializerSettings;
 
-        IHttpClientFactory _httpClientFactory;
+        public CloudSearchSettings(string endpoint, IHttpClientFactory httpClientFactory = null, JsonSerializerSettings documentSerializerSettings = null)
+        {
+            if (endpoint == null) throw new ArgumentNullException("endpoint");
 
-        public string Endpoint { get; set; }
+            _endpoint = endpoint;
+            _httpClientFactory = httpClientFactory ?? new DefaultHttpClientFactory();
+            _documentSerializerSettings = documentSerializerSettings ?? new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+        }
+
+        public string Endpoint
+        {
+            get { return _endpoint; }
+        }
 
         public IHttpClientFactory HttpClientFactory
         {
-            get { return _httpClientFactory ?? DefaultHttpClientFactory; }
-            set
-            {
-                if (value == null)
-                    throw new ArgumentNullException("value");
+            get { return _httpClientFactory; }
+        }
 
-                _httpClientFactory = value;
-            }
+        public JsonSerializerSettings DocumentSerializerSettings
+        {
+            get { return _documentSerializerSettings; }
         }
     }
 }

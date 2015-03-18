@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -9,29 +8,30 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json.Serialization;
 
 namespace Comb
 {
     public class CloudSearchClient : ICloudSearchClient
     {
+        readonly ICloudSearchSettings _settings;
         readonly HttpClient _searchClient;
         readonly HttpClient _documentClient;
-        readonly JsonSerializer _jsonSerializer;
+        readonly JsonSerializer _responseDeserializer;
 
-        public CloudSearchClient()
-            : this(CloudSearchSettings.Default)
+        public CloudSearchClient(ICloudSearchSettings settings)
         {
-        }
+            if (settings == null) throw new ArgumentNullException("settings");
 
-        public CloudSearchClient(CloudSearchSettings settings)
-        {
+            _settings = settings;
+
             _searchClient = settings.HttpClientFactory.MakeInstance();
             _searchClient.BaseAddress = new Uri(string.Format("http://search-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
 
             _documentClient = settings.HttpClientFactory.MakeInstance();
             _documentClient.BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
 
-            _jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            _responseDeserializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
         }
 
         public Task<UpdateResponse> UpdateAsync(DocumentRequest request)
@@ -41,7 +41,7 @@ namespace Comb
 
         public Task<UpdateResponse> UpdateAsync(IEnumerable<DocumentRequest> requests)
         {
-            return PostDocuments<UpdateResponse>(_documentClient, "documents/batch", requests);
+            return PostDocuments(_documentClient, "documents/batch", requests);
         }
 
         public Task<SearchResponse<EmptyResult>> SearchAsync(SearchRequest request)
@@ -110,24 +110,18 @@ namespace Comb
                     if (!httpResponse.IsSuccessStatusCode)
                         throw HandleSearchError(httpResponse, jsonReader, info);
 
-                    var response = _jsonSerializer.Deserialize<SearchResponse<T>>(jsonReader);
+                    var response = _responseDeserializer.Deserialize<SearchResponse<T>>(jsonReader);
                     response.Request = info;
                     return response;
                 }
             }
         }
 
-        async Task<T> PostDocuments<T>(HttpClient httpClient, string url, object body)
+        async Task<UpdateResponse> PostDocuments(HttpClient httpClient, string url, object body)
         {
-            HttpContent input;
+            var serializedBody = JsonConvert.SerializeObject(body, _settings.DocumentSerializerSettings);
 
-            using (var sw = new StringWriter())
-            {
-                _jsonSerializer.Serialize(sw, body);
-                input = new StringContent(sw.ToString(), Encoding.UTF8, "application/json");
-            }
-
-            using (var response = await httpClient.PostAsync(url, input))
+            using (var response = await httpClient.PostAsync(url, new StringContent(serializedBody, Encoding.UTF8, "application/json")))
             {
                 using (var content = await response.Content.ReadAsStreamAsync())
                 using (var streamReader = new StreamReader(content, Encoding.UTF8))
@@ -136,7 +130,7 @@ namespace Comb
                     if (!response.IsSuccessStatusCode)
                         throw HandleUpdateError(response, jsonReader);
 
-                    return _jsonSerializer.Deserialize<T>(jsonReader);
+                    return _responseDeserializer.Deserialize<UpdateResponse>(jsonReader);
                 }
             }
         }
@@ -149,7 +143,7 @@ namespace Comb
             // http://docs.aws.amazon.com/cloudsearch/latest/developerguide/error-handling.html
             // http://docs.aws.amazon.com/general/latest/gr/api-retries.html
 
-            var response = _jsonSerializer.Deserialize<SearchErrorResponse>(jsonReader);
+            var response = _responseDeserializer.Deserialize<SearchErrorResponse>(jsonReader);
 
             return new SearchException(info, httpResponse.StatusCode, response.Message);
         }
@@ -167,7 +161,7 @@ namespace Comb
             // If we have a 400 error, get error message from returned json object
             if (400 <= (int)httpResponse.StatusCode && (int)httpResponse.StatusCode < 500)
             {
-                var responseObject = _jsonSerializer.Deserialize<UpdateResponse>(jsonReader);
+                var responseObject = _responseDeserializer.Deserialize<UpdateResponse>(jsonReader);
 
                 if (responseObject != null && responseObject.Message != null)
                     message = responseObject.Message;

@@ -13,11 +13,7 @@ namespace Comb.Tests
         public void SetUp()
         {
             _httpHandler = new TestHttpMessageHandler();
-            _cloudSearchClient = new CloudSearchClient(new CloudSearchSettings
-            {
-                Endpoint = "cloudsearch.example.com",
-                HttpClientFactory = new TestHttpClientFactory(_httpHandler)
-            });
+            _cloudSearchClient = new CloudSearchClient(new CloudSearchSettings("cloudsearch.example.com", new TestHttpClientFactory(_httpHandler)));
         }
 
         [Test]
