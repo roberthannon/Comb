@@ -24,7 +24,7 @@ namespace Comb.Sample
             var query = new SearchRequest
             {
                 //Query = new SimpleQuery("boop |beep -bing"),
-                Query = new StructuredQuery(new AndCondition(new[] { new FieldCondition("boop", "test"), new FieldCondition("beep") })),
+                Query = new StructuredQuery(new AndCondition(new[] { new FieldCondition("Boop Beep", "test"), new FieldCondition("beep") })),
                 //Query = new StructuredQuery(new FieldCondition("profile", "doctype")),
                 Start = 0,
                 Size = 20,
@@ -50,7 +50,8 @@ namespace Comb.Sample
                     //    new Bucket(new Range(100, 500, maxInclusive: true)),
                     //    new Bucket(new Range(500))
                     //})
-                }
+                },
+                Options = new SearchOptions { DefaultOperator = DefaultOperator.And }
             };
 
             var client = new CloudSearchClient(new CloudSearchSettings(SampleEndpoint));

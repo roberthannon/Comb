@@ -8,7 +8,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Newtonsoft.Json.Serialization;
 
 namespace Comb
 {
@@ -31,7 +30,7 @@ namespace Comb
             _documentClient = settings.HttpClientFactory.MakeInstance();
             _documentClient.BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
 
-            _responseDeserializer = JsonSerializer.Create(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            _responseDeserializer = JsonSerializer.Create(JsonSettings.Default);
         }
 
         public Task<UpdateResponse> UpdateAsync(DocumentRequest request)
@@ -63,6 +62,11 @@ namespace Comb
             if (request.Filter != null)
             {
                 queryString["fq"] = info.Filter = request.Filter.Definition;
+            }
+
+            if (request.Options != null)
+            {
+                queryString["q.options"] = info.Options = JsonConvert.SerializeObject(request.Options, JsonSettings.Default);
             }
 
             if (request.Start.HasValue)
@@ -119,7 +123,7 @@ namespace Comb
 
         async Task<UpdateResponse> PostDocuments(HttpClient httpClient, string url, object body)
         {
-            var serializedBody = JsonConvert.SerializeObject(body, _settings.DocumentSerializerSettings);
+            var serializedBody = JsonConvert.SerializeObject(body, JsonSettings.Default/*_settings.DocumentSerializerSettings*/); // TODO Custom serialiser settings?
 
             using (var response = await httpClient.PostAsync(url, new StringContent(serializedBody, Encoding.UTF8, "application/json")))
             {

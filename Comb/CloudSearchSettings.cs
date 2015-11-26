@@ -1,6 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Comb
 {
@@ -8,15 +6,13 @@ namespace Comb
     {
         readonly string _endpoint;
         readonly IHttpClientFactory _httpClientFactory;
-        readonly JsonSerializerSettings _documentSerializerSettings;
 
-        public CloudSearchSettings(string endpoint, IHttpClientFactory httpClientFactory = null, JsonSerializerSettings documentSerializerSettings = null)
+        public CloudSearchSettings(string endpoint, IHttpClientFactory httpClientFactory = null)
         {
             if (endpoint == null) throw new ArgumentNullException("endpoint");
 
             _endpoint = endpoint;
             _httpClientFactory = httpClientFactory ?? new DefaultHttpClientFactory();
-            _documentSerializerSettings = documentSerializerSettings ?? new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
         }
 
         public string Endpoint
@@ -27,11 +23,6 @@ namespace Comb
         public IHttpClientFactory HttpClientFactory
         {
             get { return _httpClientFactory; }
-        }
-
-        public JsonSerializerSettings DocumentSerializerSettings
-        {
-            get { return _documentSerializerSettings; }
         }
     }
 }

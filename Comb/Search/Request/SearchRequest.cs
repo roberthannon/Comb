@@ -13,6 +13,8 @@ namespace Comb
         /// </summary>
         public StructuredQuery Filter { get; set; }
 
+        public SearchOptions Options { get; set; }
+
         public uint? Start { get; set; }
 
         public uint? Size { get; set; }
