@@ -4,25 +4,19 @@ namespace Comb
 {
     public class CloudSearchSettings : ICloudSearchSettings
     {
-        readonly string _endpoint;
-        readonly IHttpClientFactory _httpClientFactory;
-
-        public CloudSearchSettings(string endpoint, IHttpClientFactory httpClientFactory = null)
+        public CloudSearchSettings(string endpoint, IHttpClientFactory httpClientFactory = null, SearchHttpMethod searchMethod = SearchHttpMethod.Get)
         {
             if (endpoint == null) throw new ArgumentNullException("endpoint");
 
-            _endpoint = endpoint;
-            _httpClientFactory = httpClientFactory ?? new DefaultHttpClientFactory();
+            Endpoint = endpoint;
+            HttpClientFactory = httpClientFactory ?? new DefaultHttpClientFactory();
+            SearchMethod = searchMethod;
         }
 
-        public string Endpoint
-        {
-            get { return _endpoint; }
-        }
+        public string Endpoint { get; }
 
-        public IHttpClientFactory HttpClientFactory
-        {
-            get { return _httpClientFactory; }
-        }
+        public IHttpClientFactory HttpClientFactory { get; }
+
+        public SearchHttpMethod SearchMethod { get; }
     }
 }

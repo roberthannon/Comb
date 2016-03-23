@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Comb
 {
@@ -25,10 +23,10 @@ namespace Comb
             _settings = settings;
 
             _searchClient = settings.HttpClientFactory.MakeInstance();
-            _searchClient.BaseAddress = new Uri(string.Format("http://search-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
+            _searchClient.BaseAddress = new Uri($"http://search-{settings.Endpoint}/{Constants.ApiVersion}/");
 
             _documentClient = settings.HttpClientFactory.MakeInstance();
-            _documentClient.BaseAddress = new Uri(string.Format("http://doc-{0}/{1}/", settings.Endpoint, Constants.ApiVersion));
+            _documentClient.BaseAddress = new Uri($"http://doc-{settings.Endpoint}/{Constants.ApiVersion}/");
 
             _responseDeserializer = JsonSerializer.Create(JsonSettings.Default);
         }
@@ -42,7 +40,7 @@ namespace Comb
         {
             return PostDocuments(_documentClient, "documents/batch", requests);
         }
-
+        
         public Task<SearchResponse<EmptyResult>> SearchAsync(SearchRequest request)
         {
             return SearchAsync<EmptyResult>(request);
@@ -50,62 +48,54 @@ namespace Comb
 
         public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
         {
-            var queryString = HttpUtility.ParseQueryString(String.Empty);
-            var info = new SearchInfo();
+            var parameters = new Dictionary<string, string>();
 
             if (request.Query != null)
             {
-                queryString["q"]        = info.Query  = request.Query.Definition;
-                queryString["q.parser"] = info.Parser = request.Query.Parser;
+                parameters["q"]        = request.Query.Definition;
+                parameters["q.parser"] = request.Query.Parser;
             }
 
             if (request.Filter != null)
-            {
-                queryString["fq"] = info.Filter = request.Filter.Definition;
-            }
+                parameters["fq"] = request.Filter.Definition;
 
             if (request.Options != null)
-            {
-                queryString["q.options"] = info.Options = JsonConvert.SerializeObject(request.Options, JsonSettings.Default);
-            }
+                parameters["q.options"] = JsonConvert.SerializeObject(request.Options, JsonSettings.Default);
 
             if (request.Start.HasValue)
-                queryString["start"] = info.Start = request.Start.ToString();
+                parameters["start"] = request.Start.ToString();
 
             if (request.Size.HasValue)
-                queryString["size"] = info.Size = request.Size.ToString();
+                parameters["size"] = request.Size.ToString();
 
             if (request.Sort.Any())
-                queryString["sort"] = info.Sort = string.Join(",", request.Sort);
+                parameters["sort"] = string.Join(",", request.Sort);
 
             if (request.Return.Any())
-                queryString["return"] = info.Return = string.Join(",", request.Return);
+                parameters["return"] = string.Join(",", request.Return);
 
-            info.Facets = request.Facets.Select(facet =>
-            {
-                var queryParamName = string.Format("facet.{0}", facet.Field.Name);
-                var queryParamValue = facet.Definition;
-                queryString[queryParamName] = queryParamValue;
-                return new KeyValuePair<string, string>(queryParamName, queryParamValue);
-            }).ToArray();
+            var facets = request.Facets.ToDictionary(f => $"facet.{f.Field.Name}", f => f.Definition);
 
-            info.Expressions = request.Expressions.Select(expression =>
-            {
-                var queryParamName = string.Format("expr.{0}", expression.Name);
-                var queryParamValue = expression.Definition;
-                queryString[queryParamName] = queryParamValue;
-                return new KeyValuePair<string, string>(queryParamName, queryParamValue);
-            }).ToArray();
+            foreach (var f in facets)
+                parameters[f.Key] = f.Value;
 
-            return RunSearch<T>(_searchClient, "search", queryString, info);
+            var expressions = request.Expressions.ToDictionary(e => $"expr.{e.Name}", e => e.Definition);
+
+            foreach (var e in expressions)
+                parameters[e.Key] = e.Value;
+
+            return RunSearch<T>(_searchClient, "search", parameters);
         }
 
-        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, NameValueCollection queryString, SearchInfo info)
+        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, IDictionary<string, string> parameters)
         {
-            if (queryString != null)
-                url = info.Url = string.Format("{0}?{1}", url, queryString);
+            var info = new SearchInfo(url, parameters);
 
-            using (var httpResponse = await httpClient.GetAsync(url).ConfigureAwait(false))
+            var request = _settings.SearchMethod == SearchHttpMethod.Post ?
+                httpClient.PostAsync(url, new FormUrlEncodedContent(parameters)) :
+                httpClient.GetAsync(MakeGetUrl(url, parameters));
+
+            using (var httpResponse = await request.ConfigureAwait(false))
             {
                 using (var content = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false))
                 using (var streamReader = new StreamReader(content, Encoding.UTF8))
@@ -174,6 +164,32 @@ namespace Comb
             }
 
             return new UpdateException(null, httpResponse.StatusCode, message);
+        }
+
+        static string MakeGetUrl(string url, IDictionary<string, string> parameters)
+        {
+            if (parameters == null || !parameters.Any())
+                return url;
+
+            var sb = new StringBuilder(url);
+
+            sb.Append("?");
+
+            var isSubsequent = false;
+
+            foreach (var parameter in parameters)
+            {
+                if (isSubsequent)
+                    sb.Append("&");
+                else
+                    isSubsequent = true;
+
+                sb.Append(parameter.Key);
+                sb.Append("=");
+                sb.Append(Uri.EscapeDataString(parameter.Value));
+            }
+
+            return sb.ToString();
         }
     }
 }

@@ -24,9 +24,12 @@ namespace Comb.Tests
                 Query = new SimpleQuery("boop")
             });
 
-            Assert.That(response.Request.Parser, Is.EqualTo("simple"));
-            Assert.That(response.Request.Query,  Is.EqualTo("boop"));
-            Assert.That(response.Request.Url,    Is.EqualTo("search?q=boop&q.parser=simple"));
+            Assert.That(response.Request.Url, Is.EqualTo("search"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "boop" },
+                { "q.parser", "simple" }
+            }));
         }
 
         [Test]
@@ -37,9 +40,12 @@ namespace Comb.Tests
                 Query = new StructuredQuery(new FieldCondition("two", "one"))
             });
 
-            Assert.That(response.Request.Parser, Is.EqualTo("structured"));
-            Assert.That(response.Request.Query,  Is.EqualTo("one:'two'"));
-            Assert.That(response.Request.Url,    Is.EqualTo("search?q=one%3a%27two%27&q.parser=structured"));
+            Assert.That(response.Request.Url, Is.EqualTo("search"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "one:'two'" },
+                { "q.parser", "structured" }
+            }));
         }
 
         [Test]
@@ -52,8 +58,13 @@ namespace Comb.Tests
                 Start = 456
             });
 
-            Assert.That(response.Request.Size,  Is.EqualTo("123"));
-            Assert.That(response.Request.Start, Is.EqualTo("456"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "abc" },
+                { "q.parser", "simple" },
+                { "start", "456" },
+                { "size", "123" }
+            }));
         }
 
         [Test]
@@ -78,37 +89,39 @@ namespace Comb.Tests
                 }
             });
 
-            Assert.AreEqual(response.Request.Facets.Length, 5);
-            Assert.AreEqual(response.Request.Facets[0].Key, "facet.status");
-            Assert.AreEqual(response.Request.Facets[0].Value, "{}");
-            Assert.AreEqual(response.Request.Facets[1].Key, "facet.genre");
-            Assert.AreEqual(response.Request.Facets[1].Value, "{sort:'bucket',size:6}");
-            Assert.AreEqual(response.Request.Facets[2].Key, "facet.metadata");
-            Assert.AreEqual(response.Request.Facets[2].Value, "{sort:'count',size:53}"); 
-            Assert.AreEqual(response.Request.Facets[3].Key, "facet.colour");
-            Assert.AreEqual(response.Request.Facets[3].Value, "{buckets:[\"red\",\"green\",\"blue\"],method:\"filter\"}");
-            Assert.AreEqual(response.Request.Facets[4].Key, "facet.century");
-            Assert.AreEqual(response.Request.Facets[4].Value, "{buckets:[\"[1600,1700}\",\"[1700,1800}\",\"[1800,2000}\"],method:\"interval\"}");
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "boop" },
+                { "q.parser", "simple" },
+                { "facet.status", "{}" },
+                { "facet.genre", "{sort:'bucket',size:6}" },
+                { "facet.metadata", "{sort:'count',size:53}" },
+                { "facet.colour", "{buckets:[\"red\",\"green\",\"blue\"],method:\"filter\"}" },
+                { "facet.century", "{buckets:[\"[1600,1700}\",\"[1700,1800}\",\"[1800,2000}\"],method:\"interval\"}" }
+            }));
         }
 
         [Test]
         public async void InfoIncludesSortExpression()
         {
-            var expression = new Expression("mysort", "two*three+four");
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
                 Sort = new List<Sort>
                 {
                     new Sort("createddate", SortDirection.Ascending),
-                    new Sort(expression, SortDirection.Descending),
+                    new Sort(new Expression("mysort", "two*three+four"), SortDirection.Descending),
                     new Sort(SortFields.Id, SortDirection.Ascending)
                 }
             });
 
-            Assert.That(response.Request.Sort, Is.EqualTo("createddate asc,mysort desc,_id asc"));
-            Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.mysort", "two*three+four")));
-            Assert.That(response.Request.Url, Contains.Substring("expr.mysort=two*three%2bfour"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "boop" },
+                { "q.parser", "simple" },
+                { "sort", "createddate asc,mysort desc,_id asc" },
+                { "expr.mysort", "two*three+four" }
+            }));
         }
 
         [Test]
@@ -120,26 +133,33 @@ namespace Comb.Tests
                 Return = new List<Return> { new Return("this"), new Return("that"), Return.Score }
             });
 
-            Assert.That(response.Request.Return, Is.EqualTo("this,that,_score"));
-            Assert.That(response.Request.Url, Contains.Substring("&return=this%2cthat%2c_score"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "'yellow'" },
+                { "q.parser", "structured" },
+                { "return", "this,that,_score" }
+            }));
         }
 
         [Test]
         public async void InfoIncludesReturnExpression()
         {
-            var expression = new Expression("one", "two*three+four");
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new SimpleQuery("boop"),
                 Return = new List<Return>
                 {
-                    new Return(expression)
+                    new Return(new Expression("one", "two*three+four"))
                 }
             });
 
-            Assert.That(response.Request.Return, Is.EqualTo("one"));
-            Assert.That(response.Request.Expressions, Contains.Item(new KeyValuePair<string, string>("expr.one", "two*three+four")));
-            Assert.That(response.Request.Url, Contains.Substring("&expr.one=two*three%2bfour"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "boop" },
+                { "q.parser", "simple" },
+                { "return", "one" },
+                { "expr.one", "two*three+four" }
+            }));
         }
 
         [Test]
@@ -151,8 +171,12 @@ namespace Comb.Tests
                 Filter = new StructuredQuery(new AndCondition(new[] { new FieldCondition("thingy 1", "somefield"), new FieldCondition("thingy 2") }))
             });
 
-            Assert.That(response.Request.Filter, Is.EqualTo("(and somefield:'thingy 1' 'thingy 2')"));
-            Assert.That(response.Request.Url, Contains.Substring("&fq=(and+somefield%3a%27thingy+1%27+%27thingy+2%27)"));
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "boop" },
+                { "q.parser", "simple" },
+                { "fq", "(and somefield:'thingy 1' 'thingy 2')" }
+            }));
         }
 
         [Test]
@@ -181,9 +205,12 @@ namespace Comb.Tests
             }
             catch (SearchException ex)
             {
-                Assert.That(ex.Request.Parser, Is.EqualTo("simple"));
-                Assert.That(ex.Request.Query,  Is.EqualTo("123"));
-                Assert.That(ex.Request.Url,    Is.EqualTo("search?q=123&q.parser=simple"));
+                Assert.That(ex.Request.Url, Is.EqualTo("search"));
+                Assert.That(ex.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+                {
+                    { "q", "123" },
+                    { "q.parser", "simple" }
+                }));
             }
         }
 

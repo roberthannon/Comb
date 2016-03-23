@@ -4,5 +4,6 @@
     {
         string Endpoint { get; }
         IHttpClientFactory HttpClientFactory { get; }
+        SearchHttpMethod SearchMethod { get; }
     }
 }

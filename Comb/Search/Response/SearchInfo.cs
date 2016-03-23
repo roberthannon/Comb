@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Comb
 {
@@ -7,16 +8,17 @@ namespace Comb
     /// </summary>
     public class SearchInfo
     {
-        public string Url    { get; set; }
-        public string Parser { get; set; }
-        public string Query  { get; set; }
-        public string Filter { get; set; }
-        public string Options { get; set; }
-        public string Size   { get; set; }
-        public string Start  { get; set; }
-        public string Sort   { get; set; }
-        public string Return { get; set; }
-        public KeyValuePair<string, string>[] Facets { get; set; }
-        public KeyValuePair<string, string>[] Expressions { get; set; }
+        public string Url { get; }
+
+        public IDictionary<string, string> Parameters { get; }
+
+        public SearchInfo(string url, IDictionary<string, string> parameters)
+        {
+            if (url == null) throw new ArgumentNullException(nameof(url));
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+
+            Url = url;
+            Parameters = parameters;
+        }
     }
 }
