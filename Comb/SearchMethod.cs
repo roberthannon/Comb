@@ -1,6 +1,6 @@
 ﻿namespace Comb
 {
-    public enum SearchHttpMethod
+    public enum SearchMethod
     {
         Get,
         Post

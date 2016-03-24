@@ -40,11 +40,6 @@ namespace Comb
         {
             return PostDocuments(_documentClient, "documents/batch", requests);
         }
-        
-        public Task<SearchResponse<EmptyResult>> SearchAsync(SearchRequest request)
-        {
-            return SearchAsync<EmptyResult>(request);
-        }
 
         public Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request)
         {
@@ -84,14 +79,14 @@ namespace Comb
             foreach (var e in expressions)
                 parameters[e.Key] = e.Value;
 
-            return RunSearch<T>(_searchClient, "search", parameters);
+            return RunSearch<T>(_searchClient, request.Method, "search", parameters);
         }
 
-        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, string url, IDictionary<string, string> parameters)
+        async Task<SearchResponse<T>> RunSearch<T>(HttpClient httpClient, SearchMethod method, string url, IDictionary<string, string> parameters)
         {
             var info = new SearchInfo(url, parameters);
 
-            var request = _settings.SearchMethod == SearchHttpMethod.Post ?
+            var request = method == SearchMethod.Post ?
                 httpClient.PostAsync(url, new FormUrlEncodedContent(parameters)) :
                 httpClient.GetAsync(MakeGetUrl(url, parameters));
 

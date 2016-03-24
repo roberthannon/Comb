@@ -4,6 +4,8 @@ namespace Comb
 {
     public class SearchRequest
     {
+        public SearchMethod Method { get; set; }
+
         public Query Query { get; set; }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Comb
 
         public SearchRequest()
         {
+            Method = SearchMethod.Get;
             Sort = new List<Sort>();
             Return = new List<Return>();
             Facets = new List<Facet>();

@@ -9,6 +9,5 @@ namespace Comb
         Task<UpdateResponse> UpdateAsync(IEnumerable<DocumentRequest> requests);
 
         Task<SearchResponse<T>> SearchAsync<T>(SearchRequest request);
-        Task<SearchResponse<EmptyResult>> SearchAsync(SearchRequest request);
     }
 }

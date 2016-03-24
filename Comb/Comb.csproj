@@ -51,13 +51,12 @@
     <Compile Include="Field\FieldType.cs" />
     <Compile Include="ICloudSearchSettings.cs" />
     <Compile Include="JsonSettings.cs" />
-    <Compile Include="SearchHttpMethod.cs" />
+    <Compile Include="SearchMethod.cs" />
     <Compile Include="Search\Request\DefaultOperator.cs" />
     <Compile Include="Search\Request\Facets\BucketFacet.cs" />
     <Compile Include="Search\Request\Queries\Structured\Values\LatLon.cs" />
     <Compile Include="Search\Request\SearchOptions.cs" />
     <Compile Include="Search\Response\FacetBucketResult.cs" />
-    <Compile Include="Search\Response\EmptyResult.cs" />
     <Compile Include="Search\Request\Facets\Bucket.cs" />
     <Compile Include="Search\Request\Facets\FacetMethodType.cs" />
     <Compile Include="Search\Request\Facets\FacetSortType.cs" />
