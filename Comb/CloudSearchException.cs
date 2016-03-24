@@ -8,16 +8,13 @@ namespace Comb
         /// <summary>
         /// The HTTP status code returned by CloudSearch.
         /// </summary>
-        public HttpStatusCode HttpStatusCode { get; private set; }
+        public HttpStatusCode HttpStatusCode { get; }
 
         /// <summary>
         /// Returns true if this is a transient CloudSearch error that Amazon recommends you retry,
         /// otherwise false.
         /// </summary>
-        public bool ShouldRetry
-        {
-            get { return 500 <= (int)HttpStatusCode; }
-        }
+        public bool ShouldRetry => 500 <= (int)HttpStatusCode;
 
         /// <summary>
         /// Initializes a new instance of <see cref="CloudSearchException" /> with the given status

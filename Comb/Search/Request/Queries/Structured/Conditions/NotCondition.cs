@@ -7,6 +7,6 @@ namespace Comb
         {
         }
 
-        public override string Opcode { get { return "not"; } }
+        public override string Opcode => "not";
     }
 }

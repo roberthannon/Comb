@@ -4,16 +4,13 @@ namespace Comb
 {
     public class Sort
     {
-        readonly IField _field;
-        readonly SortDirection _direction;
-
         public Sort(IField field, SortDirection direction)
         {
             if (field == null)
-                throw new ArgumentNullException("field");
+                throw new ArgumentNullException(nameof(field));
 
-            _field = field;
-            _direction = direction;
+            Field = field;
+            Direction = direction;
         }
 
         public Sort(string fieldName, SortDirection direction)
@@ -21,13 +18,13 @@ namespace Comb
         {
         }
 
-        public IField Field { get { return _field; } }
+        public IField Field { get; }
 
-        public SortDirection Direction { get { return _direction; } }
+        public SortDirection Direction { get; }
 
         public override string ToString()
         {
-            return string.Format("{0} {1}", _field.Name, _direction == SortDirection.Ascending ? "asc" : "desc");
+            return $"{Field.Name} {(Direction == SortDirection.Ascending ? "asc" : "desc")}";
         }
     }
 }

@@ -117,6 +117,7 @@
     <Compile Include="Search\Response\SearchResponse.cs" />
     <Compile Include="Search\Response\Status.cs" />
     <Compile Include="Update\UpdateException.cs" />
+    <Compile Include="Update\UpdateType.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

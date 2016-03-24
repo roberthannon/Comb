@@ -13,21 +13,21 @@ namespace Comb
             : base(operand, field, boost)
         {
             if (field == null)
-                throw new ArgumentNullException("field"); // Must specify field for non-string values
+                throw new ArgumentNullException(nameof(field)); // Must specify field for non-string values
         }
 
         public TermCondition(DoubleValue operand, IField field, uint? boost = null)
             : base(operand, field, boost)
         {
             if (field == null)
-                throw new ArgumentNullException("field"); // Must specify field for non-string values
+                throw new ArgumentNullException(nameof(field)); // Must specify field for non-string values
         }
 
         public TermCondition(DateValue operand, IField field, uint? boost = null)
             : base(operand, field, boost)
         {
             if (field == null)
-                throw new ArgumentNullException("field"); // Must specify field for non-string values
+                throw new ArgumentNullException(nameof(field)); // Must specify field for non-string values
         }
 
         public TermCondition(string operand, string field = null, uint? boost = null)
@@ -50,6 +50,6 @@ namespace Comb
         {
         }
 
-        public override string Opcode { get { return "term"; } }
+        public override string Opcode => "term";
     }
 }

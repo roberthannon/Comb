@@ -2,26 +2,20 @@
 {
     public class LatLon : IOperand
     {
-        readonly double _latitude;
-        readonly double _longitude;
-
         public LatLon(double latitude, double longitude)
         {
-            _latitude = latitude;
-            _longitude = longitude;
+            Latitude = latitude;
+            Longitude = longitude;
         }
 
-        public double Latitude { get { return _latitude; } }
-        public double Longitude { get { return _longitude; } }
+        public double Latitude { get; }
+        public double Longitude { get; }
 
-        public string Definition
-        {
-            get { return Utilities.WrapValue(ToString()); }
-        }
+        public string Definition => Utilities.WrapValue(ToString());
 
         public override string ToString()
         {
-            return Utilities.LatLonString(_latitude, _longitude); // Not wrapped in single quotes
+            return Utilities.LatLonString(Latitude, Longitude); // Not wrapped in single quotes
         }
     }
 }

@@ -4,11 +4,6 @@ namespace Comb
 {
     public class Range : IOperand
     {
-        readonly IOperand _min;
-        readonly IOperand _max;
-        readonly bool _minInclusive;
-        readonly bool _maxInclusive;
-
         private Range(IOperand min = null, IOperand max = null, bool minInclusive = false, bool maxInclusive = false)
         {
             if (min == null && max == null)
@@ -16,10 +11,10 @@ namespace Comb
 
             // TODO check min < max?
 
-            _min = min;
-            _max = max;
-            _minInclusive = minInclusive;
-            _maxInclusive = maxInclusive;
+            Min = min;
+            Max = max;
+            MinInclusive = minInclusive;
+            MaxInclusive = maxInclusive;
         }
 
         public Range(IntValue min = null, IntValue max = null, bool minInclusive = false, bool maxInclusive = false)
@@ -72,21 +67,20 @@ namespace Comb
         {
         }
 
-        public IOperand Min { get { return _min; } }
-        public IOperand Max { get { return _max; } }
+        public IOperand Min { get; }
+        public IOperand Max { get; }
+        public bool MinInclusive { get; }
+        public bool MaxInclusive { get; }
 
-        public string Definition
-        {
-            get { return ToString(); }
-        }
+        public string Definition => ToString();
 
         public override string ToString()
         {
             return string.Format("{2}{0},{1}{3}",
-                _min != null ? _min.Definition : "",
-                _max != null ? _max.Definition : "",
-                _minInclusive ? "[" : "{",
-                _maxInclusive ? "]" : "}");
+                Min != null ? Min.Definition : "",
+                Max != null ? Max.Definition : "",
+                MinInclusive ? "[" : "{",
+                MaxInclusive ? "]" : "}");
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Comb
         /// <summary>
         /// The response object returned from CloudSearch.
         /// </summary>
-        public UpdateResponse Response { get; protected set; }
+        public UpdateResponse Response { get; }
 
         /// <summary>
         /// Initializes a new instance of <see cref="UpdateException" /> with the given response,

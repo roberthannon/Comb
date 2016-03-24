@@ -12,6 +12,6 @@ namespace Comb
         {
         }
 
-        public override string Opcode { get { return "prefix"; } }
+        public override string Opcode => "prefix";
     }
 }

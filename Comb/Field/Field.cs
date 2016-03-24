@@ -5,25 +5,23 @@ namespace Comb
 {
     public class Field : IField
     {
-        readonly string _name;
-
         public Field(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             if (!Regex.IsMatch(name, Constants.FieldNameFormat))
-                throw new ArgumentException(string.Format("Invalid field name: {0}", name), "name");
+                throw new ArgumentException($"Invalid field name: {name}", nameof(name));
 
             if (Constants.ReservedFieldNames.Contains(name))
-                throw new ArgumentException(string.Format("Reserved field name: {0}", name), "name");
+                throw new ArgumentException($"Reserved field name: {name}", nameof(name));
 
-            _name = name;
+            Name = name;
         }
 
-        public string Name { get { return _name; } }
+        public string Name { get; }
 
         // TODO Might be useful
-        //public FieldType Type { get; set; }
+        //public FieldType Type { get; }
     }
 }

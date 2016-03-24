@@ -11,10 +11,9 @@ namespace Comb
         protected UniOperator(IOperand operand, IField field = null, uint? boost = null)
             : base(new[] { operand }, field, boost)
         {
-            if (operand == null)
-                throw new ArgumentNullException("operand");
+            if (operand == null) throw new ArgumentNullException(nameof(operand));
         }
 
-        public IOperand Operand { get { return Operands.FirstOrDefault(); } }
+        public IOperand Operand => Operands.Single();
     }
 }

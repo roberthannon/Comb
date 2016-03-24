@@ -8,7 +8,7 @@ namespace Comb
     /// <summary>
     /// Standard variations on JSON serialization settings for different parts of out infrastructure.
     /// </summary>
-    internal static class JsonSettings
+    public static class JsonSettings
     {
         public static readonly JsonSerializerSettings Default;
 

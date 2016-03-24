@@ -180,6 +180,23 @@ namespace Comb.Tests
         }
 
         [Test]
+        public async void InfoIncludesOptions()
+        {
+            var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
+            {
+                Query = new SimpleQuery("boop"),
+                Options = new SearchOptions { DefaultOperator = DefaultOperator.Or }
+            });
+
+            Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>
+            {
+                { "q", "boop" },
+                { "q.parser", "simple" },
+                { "q.options", "{\"defaultOperator\":\"or\"}" }
+            }));
+        }
+
+        [Test]
         [ExpectedException(typeof(SearchException), ExpectedMessage = "Failure!")]
         public async void BadRequestThrowsException()
         {

@@ -29,7 +29,7 @@ namespace Comb
         {
             // Field can't be null when using a range
             if (field == null)
-                throw new ArgumentNullException("field");
+                throw new ArgumentNullException(nameof(field));
         }
 
         public FieldCondition(string operand, string field = null)
@@ -57,16 +57,8 @@ namespace Comb
         {
         }
 
-        public override string Opcode { get { return null; } }
+        public override string Opcode => null;
 
-        public override string Definition
-        {
-            get
-            {
-                return Field == null
-                    ? Operand.Definition
-                    : string.Format("{0}:{1}", Field.Name, Operand.Definition);
-            }
-        }
+        public override string Definition => Field == null ? Operand.Definition : $"{Field.Name}:{Operand.Definition}";
     }
 }

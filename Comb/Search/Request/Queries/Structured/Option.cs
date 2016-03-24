@@ -7,24 +7,19 @@ namespace Comb
     /// </summary>
     public class Option
     {
-        readonly string _name, _value;
-
         public Option(string name, string value)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException("name");
             if (value == null) throw new ArgumentNullException("value");
 
-            _name = name;
-            _value = value;
+            Name = name;
+            Value = value;
         }
 
-        public string Name { get { return _name; } }
+        public string Name { get; }
 
-        public string Value { get { return _value; } }
+        public string Value { get; }
 
-        public string Definition
-        {
-            get { return string.Format("{0}={1}", _name, _value); }
-        }
+        public string Definition => $"{Name}={Value}";
     }
 }

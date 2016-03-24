@@ -6,24 +6,21 @@ namespace Comb
 {
     public abstract class Operator : IOperator
     {
-        readonly ICollection<IOperand> _operands;
-        readonly ICollection<Option> _options;
-        readonly IField _field;
-        readonly uint? _boost;
+        readonly List<Option> _options;
 
         protected Operator(IEnumerable<IOperand> operands, IField field = null, uint? boost = null)
         {
-            if (operands == null)
-                throw new ArgumentNullException("operands");
+            if (operands == null) throw new ArgumentNullException(nameof(operands));
 
-            _operands = operands.ToList(); // Make a copy of operands
+            Operands = operands.ToList(); // Make a copy of operands
 
-            if (_operands.Count == 0)
-                throw new ArgumentOutOfRangeException("operands", "An Operator must have at least one operand.");
+            if (Operands.Count == 0)
+                throw new ArgumentOutOfRangeException(nameof(operands), "An Operator must have at least one operand.");
+
+            Field = field;
+            Boost = boost;
 
             _options = new List<Option>();
-            _field = field;
-            _boost = boost;
 
             if (Field != null) AddOption("field", Field.Name);
             if (Boost.HasValue) AddOption("boost", Boost.ToString());
@@ -31,33 +28,28 @@ namespace Comb
 
         public abstract string Opcode { get; }
 
-        public ICollection<IOperand> Operands { get { return _operands; } }
+        public IReadOnlyList<IOperand> Operands { get; }
 
-        public ICollection<Option> Options { get { return _options; } }
+        public IField Field { get; }
 
-        public IField Field { get { return _field; } }
+        public uint? Boost { get; }
 
-        public uint? Boost { get { return _boost; } }
+        public IReadOnlyList<Option> Options => _options;
 
         public virtual string Definition
         {
             get
             {
                 var components = new List<string> { Opcode };
-                components.AddRange(_options.Select(o => o.Definition));
-                components.AddRange(_operands.Select(o => o.Definition));
-                return string.Format("({0})", string.Join(" ", components));
+                components.AddRange(Options.Select(o => o.Definition));
+                components.AddRange(Operands.Select(o => o.Definition));
+                return $"({string.Join(" ", components)})";
             }
         }
 
-        protected Option AddOption(string name, string value)
+        protected void AddOption(string name, string value)
         {
-            var option = new Option(name, value);
-
-            // TODO Allow duplicate options with same name?
-            _options.Add(option);
-
-            return option;
+            _options.Add(new Option(name, value));
         }
     }
 }

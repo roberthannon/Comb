@@ -2,12 +2,10 @@ namespace Comb
 {
     public class NearCondition : UniOperator
     {
-        readonly uint? _distance;
-
         public NearCondition(StringValue operand, IField field = null, uint? boost = null, uint? distance = null)
             : base(operand, field, boost)
         {
-            _distance = distance;
+            Distance = distance;
 
             if (Distance.HasValue) AddOption("distance", Distance.ToString());
         }
@@ -17,8 +15,8 @@ namespace Comb
         {
         }
 
-        public override string Opcode { get { return "near"; } }
+        public override string Opcode => "near";
 
-        public uint? Distance { get { return _distance; } }
+        public uint? Distance { get; }
     }
 }

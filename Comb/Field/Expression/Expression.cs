@@ -7,23 +7,17 @@ namespace Comb
     /// </summary>
     public class Expression : IExpression
     {
-        readonly string _name;
-        readonly string _definition;
-
         public Expression(string name, string definition)
         {
-            if (name == null)
-                throw new ArgumentNullException("name");
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
 
-            if (definition == null)
-                throw new ArgumentNullException("definition");
-
-            _name = name;
-            _definition = definition;
+            Name = name;
+            Definition = definition;
         }
 
-        public string Name { get { return _name; } }
+        public string Name { get; }
 
-        public string Definition { get { return _definition; } }
+        public string Definition { get; }
     }
 }

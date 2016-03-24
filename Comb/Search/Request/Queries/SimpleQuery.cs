@@ -1,4 +1,6 @@
-﻿namespace Comb
+﻿using System;
+
+namespace Comb
 {
     /// <summary>
     /// Defines how results are found using the 'simple' query syntax.
@@ -6,18 +8,15 @@
     /// </summary>
     public class SimpleQuery : Query
     {
-        readonly string _definition;
-
         public SimpleQuery(string definition)
         {
-            _definition = definition;
+            if (definition == null) throw new ArgumentNullException(nameof(definition));
+
+            Definition = definition;
         }
 
-        public override string Parser
-        {
-            get { return "simple"; }
-        }
+        public override string Parser => "simple";
 
-        public override string Definition { get { return _definition; } }
+        public override string Definition { get; }
     }
 }

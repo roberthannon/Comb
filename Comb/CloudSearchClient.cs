@@ -113,7 +113,7 @@ namespace Comb
 
         async Task<UpdateResponse> PostDocuments(HttpClient httpClient, string url, object body)
         {
-            var serializedBody = JsonConvert.SerializeObject(body, JsonSettings.Default/*_settings.DocumentSerializerSettings*/); // TODO Custom serialiser settings?
+            var serializedBody = JsonConvert.SerializeObject(body, JsonSettings.Default);
 
             using (var response = await httpClient.PostAsync(url, new StringContent(serializedBody, Encoding.UTF8, "application/json")))
             {

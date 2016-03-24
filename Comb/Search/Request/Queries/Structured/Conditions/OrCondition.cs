@@ -15,16 +15,11 @@ namespace Comb
         {
         }
 
-        public override string Opcode { get { return "or"; } }
+        public override string Opcode => "or";
 
-        public override string Definition
-        {
-            get
-            {
-                return Operands.Count == 1 && Options.Count == 0 ? // If or condition has one operand and no options, it is a no-op
-                    Operands.Single().Definition : // Return the definition of the only operand
-                    base.Definition;
-            }
-        }
+        public override string Definition =>
+            Operands.Count == 1 && Options.Count == 0 ? // If or condition has one operand and no options, it is a no-op
+                Operands.Single().Definition : // Return the definition of the only operand
+                base.Definition;
     }
 }

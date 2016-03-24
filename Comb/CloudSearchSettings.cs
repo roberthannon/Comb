@@ -6,7 +6,7 @@ namespace Comb
     {
         public CloudSearchSettings(string endpoint, IHttpClientFactory httpClientFactory = null, SearchHttpMethod searchMethod = SearchHttpMethod.Get)
         {
-            if (endpoint == null) throw new ArgumentNullException("endpoint");
+            if (endpoint == null) throw new ArgumentNullException(nameof(endpoint));
 
             Endpoint = endpoint;
             HttpClientFactory = httpClientFactory ?? new DefaultHttpClientFactory();

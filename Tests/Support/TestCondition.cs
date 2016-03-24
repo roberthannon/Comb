@@ -16,12 +16,12 @@ namespace Comb.Tests.Support
             get { throw new System.NotImplementedException(); }
         }
 
-        public ICollection<Option> Options
+        public IReadOnlyList<IOperand> Operands
         {
             get { throw new System.NotImplementedException(); }
         }
 
-        public ICollection<IOperand> Operands
+        public IReadOnlyList<Option> Options
         {
             get { throw new System.NotImplementedException(); }
         }

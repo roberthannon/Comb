@@ -1,4 +1,6 @@
-﻿namespace Comb
+﻿using System;
+
+namespace Comb
 {
     /// <summary>
     /// Defines how results are found using the 'structured' query syntax.
@@ -6,23 +8,17 @@
     /// </summary>
     public class StructuredQuery : Query
     {
-        readonly IOperator _root;
-
         public StructuredQuery(IOperator root)
         {
-            _root = root;
+            if (root == null) throw new ArgumentNullException(nameof(root));
+
+            Root = root;
         }
 
-        public IOperator Root { get { return _root; } }
+        public IOperator Root { get; }
 
-        public override string Parser
-        {
-            get { return "structured"; }
-        }
+        public override string Parser => "structured";
 
-        public override string Definition
-        {
-            get { return _root.Definition; }
-        }
+        public override string Definition => Root.Definition;
     }
 }

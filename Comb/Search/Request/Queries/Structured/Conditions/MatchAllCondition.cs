@@ -4,15 +4,18 @@ namespace Comb
 {
     public class MatchAllCondition : IOperator // Special operator, don't inherit from Operator
     {
-        readonly IOperand[] _operands = new IOperand[0];
-        readonly Option[] _options = new Option[0];
+        public MatchAllCondition()
+        {
+            Operands = new IOperand[0];
+            Options = new Option[0];
+        }
 
-        public string Definition { get { return Opcode; } }
+        public string Definition => Opcode;
 
-        public string Opcode { get { return "matchall"; } }
+        public string Opcode => "matchall";
 
-        public ICollection<IOperand> Operands { get { return _operands; } }
+        public IReadOnlyList<IOperand> Operands { get; }
 
-        public ICollection<Option> Options { get { return _options; } }
+        public IReadOnlyList<Option> Options { get; }
     }
 }

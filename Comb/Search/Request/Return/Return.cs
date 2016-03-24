@@ -8,14 +8,11 @@ namespace Comb
         public static readonly Return NoFields = new Return(ReturnFields.NoFields);
         public static readonly Return Score = new Return(ReturnFields.Score);
 
-        readonly IField _field;
-
         public Return(IField field)
         {
-            if (field == null)
-                throw new ArgumentNullException("field");
+            if (field == null) throw new ArgumentNullException(nameof(field));
 
-            _field = field;
+            Field = field;
         }
 
         public Return(string fieldName)
@@ -23,11 +20,11 @@ namespace Comb
         {
         }
 
-        public IField Field { get { return _field; }}
+        public IField Field { get; }
 
         public override string ToString()
         {
-            return _field.Name;
+            return Field.Name;
         }
     }
 }

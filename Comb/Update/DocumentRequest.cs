@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 
 namespace Comb
 {
     public abstract class DocumentRequest
     {
-        [JsonProperty("type")]
-        public string Type { get; private set; } // TODO make enum?
+        public UpdateType Type { get; }
 
-        [JsonProperty("id")]
-        public string Id { get; private set; }
+        public string Id { get; }
 
-        protected DocumentRequest(string type, string id)
+        protected DocumentRequest(UpdateType type, string id)
         {
+            if (id == null) throw new ArgumentNullException(nameof(id));
+
             Type = type;
             Id = id;
         }

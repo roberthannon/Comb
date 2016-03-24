@@ -28,7 +28,7 @@ namespace Comb
         /// </summary>
         public static string DateString(DateTime dateTime)
         {
-            return string.Format("{0}", dateTime.ToString(Constants.DateFormat));
+            return $"{dateTime.ToString(Constants.DateFormat)}";
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Comb
         /// </summary>
         public static string LatLonString(double latitude, double longitude)
         {
-            return string.Format("{0},{1}", latitude, longitude);
+            return $"{latitude},{longitude}";
         }
 
         /// <summary>
@@ -44,10 +44,9 @@ namespace Comb
         /// </summary>
         public static string WrapValue(string value)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (value == null) throw new ArgumentNullException(nameof(value));
 
-            return string.Format("'{0}'", value);
+            return $"'{value}'";
         }
     }
 }
