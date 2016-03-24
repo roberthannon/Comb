@@ -18,7 +18,7 @@ namespace Comb
 
         public CloudSearchClient(ICloudSearchSettings settings)
         {
-            if (settings == null) throw new ArgumentNullException("settings");
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
 
             _settings = settings;
 

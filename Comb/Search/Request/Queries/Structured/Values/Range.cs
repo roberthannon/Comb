@@ -76,11 +76,12 @@ namespace Comb
 
         public override string ToString()
         {
-            return string.Format("{2}{0},{1}{3}",
-                Min != null ? Min.Definition : "",
-                Max != null ? Max.Definition : "",
-                MinInclusive ? "[" : "{",
-                MaxInclusive ? "]" : "}");
+            var min = Min != null ? Min.Definition : "";
+            var max = Max != null ? Max.Definition : "";
+            var open = MinInclusive ? "[" : "{";
+            var close = MaxInclusive ? "]" : "}";
+
+            return $"{open}{min},{max}{close}";
         }
     }
 }
