@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloudSearchException.cs" />
+    <Compile Include="Field\Fields.cs" />
     <Compile Include="Field\Expression\Haversin.cs" />
     <Compile Include="Field\FieldType.cs" />
     <Compile Include="ICloudSearchSettings.cs" />
@@ -61,17 +62,14 @@
     <Compile Include="Search\Request\Facets\FacetMethodType.cs" />
     <Compile Include="Search\Request\Facets\FacetSortType.cs" />
     <Compile Include="Search\Request\Facets\Facet.cs" />
-    <Compile Include="Field\BuiltInField.cs" />
     <Compile Include="Field\IField.cs" />
     <Compile Include="Field\Expression\IExpression.cs" />
     <Compile Include="Search\Request\Return\Return.cs" />
-    <Compile Include="Search\Request\Return\ReturnFields.cs" />
     <Compile Include="Search\Response\FacetResult.cs" />
     <Compile Include="Search\SearchException.cs" />
     <Compile Include="Search\Response\SearchErrorResponse.cs" />
     <Compile Include="Search\Response\SearchInfo.cs" />
     <Compile Include="Search\Request\Facets\SortFacet.cs" />
-    <Compile Include="Search\Request\Sort\SortFields.cs" />
     <Compile Include="Search\Request\Sort\SortDirection.cs" />
     <Compile Include="Search\Request\Sort\Sort.cs" />
     <Compile Include="CloudSearchSettings.cs" />

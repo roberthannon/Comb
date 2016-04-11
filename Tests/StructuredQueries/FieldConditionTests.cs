@@ -6,6 +6,7 @@ namespace Comb.Tests.StructuredQueries
 {
     public class FieldConditionTests
     {
+        [Ignore("No longer validating field names")]
         [TestCase("%")]
         [TestCase("a1")]
         [TestCase(" a ")]

@@ -35,8 +35,8 @@ namespace Comb.Sample
                 },
                 Return = new[]
                 {
-                    Return.AllFields,
-                    Return.Score
+                    new Return(Fields.All),
+                    new Return(Fields.Score)
                 },
                 Facets = new Facet[]
                 {
@@ -172,7 +172,7 @@ namespace Comb.Sample
         
         public string Literal { get; set; }
 
-        [JsonProperty(Constants.Fields.Score)]
+        [JsonProperty(Fields.Score)]
         public float Score { get; set; }
     }
 

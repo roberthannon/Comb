@@ -111,7 +111,7 @@ namespace Comb.Tests
                 {
                     new Sort("createddate", SortDirection.Ascending),
                     new Sort(new Expression("mysort", "two*three+four"), SortDirection.Descending),
-                    new Sort(SortFields.Id, SortDirection.Ascending)
+                    new Sort(Fields.Id, SortDirection.Ascending)
                 }
             });
 
@@ -130,7 +130,7 @@ namespace Comb.Tests
             var response = await _cloudSearchClient.SearchAsync<Result>(new SearchRequest
             {
                 Query = new StructuredQuery(new FieldCondition("yellow")),
-                Return = new List<Return> { new Return("this"), new Return("that"), Return.Score }
+                Return = new List<Return> { new Return("this"), new Return("that"), new Return(Fields.Score) }
             });
 
             Assert.That(response.Request.Parameters, Is.EqualTo(new Dictionary<string, string>

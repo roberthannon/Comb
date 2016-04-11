@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace Comb
 {
@@ -7,14 +6,8 @@ namespace Comb
     {
         public Field(string name)
         {
-            if (name == null)
-                throw new ArgumentNullException(nameof(name));
-
-            if (!Regex.IsMatch(name, Constants.FieldNameFormat))
-                throw new ArgumentException($"Invalid field name: {name}", nameof(name));
-
-            if (Constants.ReservedFieldNames.Contains(name))
-                throw new ArgumentException($"Reserved field name: {name}", nameof(name));
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (!IsValid(name)) throw new ArgumentException($"Invalid field name: {name}", nameof(name));
 
             Name = name;
         }
@@ -23,5 +16,11 @@ namespace Comb
 
         // TODO Might be useful
         //public FieldType Type { get; }
+
+        public static bool IsValid(string name)
+        {
+            //return Fields.BuiltIn.Contains(name) || !Fields.Reserved.Contains(name) && Fields.Format.IsMatch(name);
+            return true;
+        }
     }
 }
